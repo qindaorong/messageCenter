@@ -7,7 +7,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-
 @Slf4j
 @SpringBootApplication
 public class MessageCenterApplication extends SpringBootServletInitializer {

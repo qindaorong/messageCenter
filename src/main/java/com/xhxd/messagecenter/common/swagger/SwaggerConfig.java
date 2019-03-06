@@ -46,7 +46,6 @@ public class SwaggerConfig {
                 .title("MessageCenter v1.0.0")
                 .description("SMS服务")
                 .termsOfServiceUrl("http://ip:port/swagger-ui.html")
-                .contact("ycj")
                 .version("1.0.0")
                 .build();
     }

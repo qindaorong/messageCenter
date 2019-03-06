@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo
+
+  redis:
+    database: 0
+    host: 39.105.171.244
+    port: 6379
+    password: QMSc3F
+    pool:
+      max-active: 8
+      max-idle: 1
+      max-wait: 100000
+    timeout: 3000
+
+swagger:
+  info:
+    title: messageCenter
+    description: sms message server
+    version: v1.0.0
+    base-package: com.xhxd.messagecenter
+    enable: true
+
+message:
+  client:
+    key: xhjf-service
+    secret: xhjf_v1!#@messageServer
