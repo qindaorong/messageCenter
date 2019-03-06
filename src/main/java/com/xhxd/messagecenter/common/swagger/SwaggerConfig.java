@@ -17,17 +17,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Swagger配置
- *
- * @author ycj
- * @since 2018-07-02
- * Copyright: Copyright (c) 2018
- * Company:北京思源政务通有限公司
- */
-
 @EnableSwagger2
-@ComponentScan(basePackages = {"com.zhengtoon.framework.web.controller"})
+@ComponentScan(basePackages = {"com.xhxd.messagecenter.web.controller"})
 @Configuration
 public class SwaggerConfig {
 
@@ -44,7 +35,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.zhengtoon.framework.web.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.xhxd.messagecenter.web.controller"))
                 .paths(PathSelectors.any())
                 .build().enable(enable)
                 .globalOperationParameters(aParameters);
@@ -52,8 +43,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("fastDFS服务 v1.0.0")
-                .description("fastDFS服务")
+                .title("MessageCenter v1.0.0")
+                .description("SMS服务")
                 .termsOfServiceUrl("http://ip:port/swagger-ui.html")
                 .contact("ycj")
                 .version("1.0.0")
