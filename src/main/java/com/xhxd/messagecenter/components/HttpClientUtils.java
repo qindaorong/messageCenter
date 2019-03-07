@@ -27,8 +27,12 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public String httpGet(String url,Map<String,String> headMap) throws IOException {
-        return this.httpGetResponse(url,headMap).body().string();
+    public String httpGet(String url,Map<String,String> headMap) throws BusinessException {
+        try {
+            return this.httpGetResponse(url,headMap).body().string();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
     }
 
     /**
@@ -38,8 +42,12 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public String httpPost(String url, String json,Map<String,String> headMap) throws IOException {
-        return this.httpPostResponse(url,json,headMap).body().string();
+    public String httpPost(String url, String json,Map<String,String> headMap) throws BusinessException {
+        try {
+            return this.httpPostResponse(url,json,headMap).body().string();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
     }
 
     /**
@@ -49,7 +57,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpPostRes(String url, String json,Map<String,String> headMap) throws IOException {
+    public Response httpPostRes(String url, String json,Map<String,String> headMap) throws BusinessException {
         return this.httpPostResponse(url,json,headMap);
     }
 
@@ -60,8 +68,12 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public String httpPut(String url, String json,Map<String,String> headMap) throws IOException {
-        return this.httpPutResponse(url,json,headMap).body().string();
+    public String httpPut(String url, String json,Map<String,String> headMap) throws BusinessException {
+        try {
+            return this.httpPutResponse(url,json,headMap).body().string();
+        } catch (IOException e) {
+           throw new BusinessException(e);
+        }
     }
 
     /**
@@ -71,7 +83,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpPutRes(String url, String json,Map<String,String> headMap) throws IOException {
+    public Response httpPutRes(String url, String json,Map<String,String> headMap) throws BusinessException {
         return this.httpPutResponse(url,json,headMap);
     }
 
@@ -82,8 +94,12 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public String httpDelete(String url,String json,Map<String,String> headMap)throws IOException {
-        return this.httpDeleteResponse(url,json,headMap).body().string();
+    public String httpDelete(String url,String json,Map<String,String> headMap)throws BusinessException {
+        try {
+            return this.httpDeleteResponse(url,json,headMap).body().string();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
     }
 
 
@@ -94,7 +110,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpDeleteRes(String url,String json,Map<String,String> headMap)throws IOException {
+    public Response httpDeleteRes(String url,String json,Map<String,String> headMap)throws BusinessException {
         return this.httpDeleteResponse(url,json,headMap);
     }
 
@@ -113,7 +129,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpGetResponse(String url,Map<String,String> headMap) throws IOException {
+    public Response httpGetResponse(String url,Map<String,String> headMap) throws BusinessException {
         Request.Builder builder = new Request.Builder();
         if(!CollectionUtils.isEmpty(headMap)){
             this.addHeaderMap(builder,headMap);
@@ -122,7 +138,13 @@ public class HttpClientUtils {
         Request request = builder
                 .url(url)
                 .build();
-        Response response = okHttpClient.newCall(request).execute();
+        Response response ;
+
+        try {
+            response = okHttpClient.newCall(request).execute();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
         return response;
     }
 
@@ -134,7 +156,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpPostResponse(String url, String json,Map<String,String> headMap) throws IOException {
+    public Response httpPostResponse(String url, String json,Map<String,String> headMap) throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
         Request.Builder builder = new Request.Builder();
@@ -146,7 +168,13 @@ public class HttpClientUtils {
                 .url(url)
                 .post(requestBody)
                 .build();
-        Response response = okHttpClient.newCall(request).execute();
+        Response response ;
+
+        try {
+            response = okHttpClient.newCall(request).execute();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
         return response;
     }
 
@@ -158,7 +186,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpPutResponse(String url, String json,Map<String,String> headMap) throws IOException {
+    public Response httpPutResponse(String url, String json,Map<String,String> headMap) throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
         Request.Builder builder = new Request.Builder();
@@ -170,7 +198,13 @@ public class HttpClientUtils {
                 .url(url)
                 .put(requestBody)
                 .build();
-        Response response = okHttpClient.newCall(request).execute();
+        Response response ;
+
+        try {
+            response = okHttpClient.newCall(request).execute();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
         return response;
     }
 
@@ -181,7 +215,7 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public Response httpDeleteResponse(String url,String json,Map<String,String> headMap)throws IOException {
+    public Response httpDeleteResponse(String url,String json,Map<String,String> headMap)throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
         Request.Builder builder = new Request.Builder();
@@ -193,7 +227,12 @@ public class HttpClientUtils {
                 .url(url)
                 .delete(requestBody)
                 .build();
-        Response response = okHttpClient.newCall(request).execute();
+        Response response = null;
+        try {
+            response = okHttpClient.newCall(request).execute();
+        } catch (IOException e) {
+            throw new BusinessException(e);
+        }
         return response;
     }
 

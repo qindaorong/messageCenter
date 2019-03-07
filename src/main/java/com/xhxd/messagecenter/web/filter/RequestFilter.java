@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Order(9)
-@WebFilter(filterName="RequestFilter",urlPatterns={"/api"})
+@WebFilter(filterName="RequestFilter",urlPatterns={"/api/*"})
 @Slf4j
 public class RequestFilter implements Filter, EnvironmentAware {
 
