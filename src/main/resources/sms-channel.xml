@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<channels>
+    <channel id="51welink" open-switch="true" url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit">
+        <user name="dlbjxhhd" password="jRWS9C6s"/>
+    </channel>
+</channels>
+

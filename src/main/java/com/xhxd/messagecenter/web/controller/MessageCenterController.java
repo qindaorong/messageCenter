@@ -6,10 +6,7 @@ import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -18,7 +15,7 @@ public class MessageCenterController {
 
 
 
-    @RequestMapping(value="/sendMessage" , method = RequestMethod.POST)
+    @PostMapping(value="/sendMessage")
     public ResponseResult<String> sendMessage(@RequestBody SendMessageDto sendMessageDto){
 
         try {
@@ -28,19 +25,18 @@ public class MessageCenterController {
         }
     }
 
-
-    @RequestMapping(value="/sendVerificationCode" , method = RequestMethod.POST)
+    @PostMapping(value="/sendVerificationCode")
     public ResponseResult<String> sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
 
-            return ResponseResult.success("");
+            return ResponseResult.success("success");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
     }
 
-    @RequestMapping(value="/checkVerificationCode" , method = RequestMethod.POST)
+    @PostMapping(value="/checkVerificationCode")
     public ResponseResult<String> checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
         try {
             return ResponseResult.success("");
@@ -50,6 +46,16 @@ public class MessageCenterController {
 
     }
 
+
+    @GetMapping(value="/test" )
+    public ResponseResult<String> test(){
+        try {
+            return ResponseResult.success("");
+        }catch (BusinessException e){
+            return ResponseResult.fail(e.getCode() , e.getMessage());
+        }
+
+    }
 
 
 }
