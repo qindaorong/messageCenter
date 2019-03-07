@@ -70,4 +70,73 @@ public class ExceptionCode {
     public static final CodeMessage LOGIN_TOO_MANY = new CodeMessage(200004, "登录过于频繁，请稍后尝试");
 
     public static final CodeMessage NO_PERSSION = new CodeMessage(200005, "sorry,您没有权限");
+
+
+    /**
+     * 成功
+     */
+    public static final CodeMessage OK = new CodeMessage(200, "成功");
+
+    /**
+     * 未授权
+     */
+    public static final CodeMessage UNAUTHORIZED = new CodeMessage(401, "未授权");
+
+
+    /**
+     * 当前用户无权限
+     */
+    public static final CodeMessage FORBIDDEN = new CodeMessage(403, "当前用户无权限");
+
+    /**
+     * 当前用户无权限
+     */
+    public static final CodeMessage SERVICE_UNAVAILABL = new CodeMessage(503, "服务不可用");
+
+    /**
+     * 调用SMS service 接口错误
+     */
+    public static final CodeMessage SMS_SERVICE_ERROR = new CodeMessage(6001, "调用短信提供方接口错误");
+
+    /**
+     * 发送验证码次数上限
+     */
+    public static final CodeMessage CODE_SERVICE_ERROR = new CodeMessage(6002, "发送验证码次数上限");
+
+    /**
+     * 短信验证已过期
+     */
+    public static final CodeMessage CODE_EXPIRATION = new CodeMessage(6003, "短信验证已过期");
+
+
+    /**
+     * 短信验证码错误
+     */
+    public static final CodeMessage CODE_ERROR = new CodeMessage(6004, "短信验证码错误");
+
+
+    /**
+     * 调用SMS service 接口错误
+     */
+    public static final CodeMessage MESSAGE_SERVICE_ERROR = new CodeMessage(6005, "调用短信提供方接口错误");
+
+    /**
+     * 发送次数上限
+     */
+    public static final CodeMessage CODE_UPPER_LIMIT = new CodeMessage(6006, "发送次数上限");
+
+
+    /**
+     * 发送次数上限
+     */
+    public static final CodeMessage MESSAGE_NOT_NULL = new CodeMessage(6007, "请求信息不能为空");
+
+    /**
+     * 该通道已关闭
+     */
+    public static final CodeMessage CHANNEL_CLOSURE = new CodeMessage(6008, "该通道已关闭");
+
+
+
+
 }

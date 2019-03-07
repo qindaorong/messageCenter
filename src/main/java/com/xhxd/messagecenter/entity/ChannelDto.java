@@ -18,15 +18,19 @@ public class ChannelDto {
 
     private String url;
 
+    private String sprdId;
+
     private String userName;
 
     private String password;
+
 
 
     public void convert2ChannelDto(XmlChannel xmlChannel){
         this.id = xmlChannel.getId();
         this.openSwitch = xmlChannel.getOpenSwitch();
         this.url = xmlChannel.getUrl();
+        this.sprdId = xmlChannel.getSprdId();
         this.userName = xmlChannel.getXmlUser().getName();
         this.password = xmlChannel.getXmlUser().getPassword();
     }

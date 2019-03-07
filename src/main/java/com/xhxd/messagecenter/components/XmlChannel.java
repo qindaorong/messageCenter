@@ -20,6 +20,9 @@ public class XmlChannel {
     @XmlAttribute(name = "url")
     private String url;
 
+    @XmlAttribute(name = "sprd-id")
+    private String sprdId;
+
     @XmlElement(name = "user")
     private XmlUser xmlUser;
 }

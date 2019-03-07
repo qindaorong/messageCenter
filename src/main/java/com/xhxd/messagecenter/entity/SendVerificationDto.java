@@ -22,6 +22,11 @@ public class SendVerificationDto extends BaseDto {
     private String mobileNumber;
 
     /**
+     *  消息内容
+     */
+    private String messageContent;
+
+    /**
      * 验证码消息
      */
     private String verificationCode;
