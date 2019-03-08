@@ -116,10 +116,15 @@ public class HttpClientUtils {
 
 
 
-    private void addHeaderMap(Request.Builder builder ,Map<String,String> headMap){
-        for (Map.Entry<String, String> entry : headMap.entrySet()) {
-            builder.addHeader(entry.getKey(),entry.getValue());
+    private Request.Builder addHeaderMap(Map<String,String> headMap){
+
+        Request.Builder builder = new Request.Builder();
+        if(!CollectionUtils.isEmpty(headMap)){
+            for (Map.Entry<String, String> entry : headMap.entrySet()) {
+                builder.addHeader(entry.getKey(),entry.getValue());
+            }
         }
+        return builder;
     }
 
 
@@ -130,10 +135,7 @@ public class HttpClientUtils {
      * @throws IOException
      */
     public Response httpGetResponse(String url,Map<String,String> headMap) throws BusinessException {
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
 
         Request request = builder
                 .url(url)
@@ -159,10 +161,8 @@ public class HttpClientUtils {
     public Response httpPostResponse(String url, String json,Map<String,String> headMap) throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
+
 
         Request request = builder
                 .url(url)
@@ -189,10 +189,8 @@ public class HttpClientUtils {
     public Response httpPutResponse(String url, String json,Map<String,String> headMap) throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
+
 
         Request request = builder
                 .url(url)
@@ -218,10 +216,8 @@ public class HttpClientUtils {
     public Response httpDeleteResponse(String url,String json,Map<String,String> headMap)throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
+
 
         Request request = builder
                 .url(url)
@@ -246,12 +242,8 @@ public class HttpClientUtils {
      * @throws IOException
      */
     public Response httpFormPostResponse(String url, String json,Map<String,String> headMap,Map<String,String> formMap) throws BusinessException {
-        RequestBody requestBody = RequestBody.create(JSON, json);
+        Request.Builder builder = this.addHeaderMap(headMap);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
         Request request = builder
                 .url(url)
                 .post(this.addFormBody(formMap))
