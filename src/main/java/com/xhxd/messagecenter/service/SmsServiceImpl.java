@@ -25,15 +25,14 @@ public class SmsServiceImpl implements SmsService {
 
     private Map<String,SmsService> serviceMap = new HashMap<>();
 
-
     @Autowired
     private SmsManager smsManager;
-
 
     @PostConstruct
     public void init(){
         serviceMap.put(ChannelEnum.WELINK.getName(),new WelinkServiceServiceImpl());
     }
+
 
     @Override
     public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
@@ -54,7 +53,6 @@ public class SmsServiceImpl implements SmsService {
                 sendVerificationDto.setMessageContent(messageContent);
             }
         }
-
         //send message
         serviceMap.get(sendVerificationDto.getMessageChannel()).sendVerificationCode(sendVerificationDto);
 
@@ -91,7 +89,8 @@ public class SmsServiceImpl implements SmsService {
 
 
     private Boolean  checkChannel(String messageChannel) throws BusinessException{
-        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(messageChannel);
+        String code = ChannelEnum.getByName(messageChannel);
+        ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
         if(null != channelDto){
             boolean flag = channelDto.getOpenSwitch();
             if(!flag){

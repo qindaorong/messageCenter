@@ -7,6 +7,7 @@ import com.xhxd.messagecenter.components.HttpClientUtils;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
+import com.xhxd.messagecenter.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class MessageCenterController {
 
 
     @Autowired
-    HttpClientUtils httpClientUtils;
+    private SmsService smsService;
 
     @PostMapping(value="/sendMessage")
     public ResponseResult<String> sendMessage(@RequestBody SendMessageDto sendMessageDto){
@@ -37,7 +38,7 @@ public class MessageCenterController {
     public ResponseResult<String> sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
-
+            smsService.sendVerificationCode(sendVerificationDto);
             return ResponseResult.success("success");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
@@ -55,7 +56,9 @@ public class MessageCenterController {
     }
 
 
-    @GetMapping(value="/test" )
+
+
+    /*@GetMapping(value="/test" )
     public ResponseResult<String> test(){
         try {
 
@@ -72,7 +75,7 @@ public class MessageCenterController {
             return ResponseResult.fail(e.getCode() , e.getMessage());
         }
 
-    }
+    }*/
 
 
 }

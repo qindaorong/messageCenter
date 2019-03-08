@@ -1,37 +1,68 @@
 package com.xhxd.messagecenter.service.welinkservice;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
-import com.xhxd.messagecenter.common.exception.BusinessException;
-import com.xhxd.messagecenter.common.exception.ExceptionCode;
+import com.xhxd.messagecenter.common.util.XmlUtil;
+import com.xhxd.messagecenter.components.HttpClientUtils;
+import com.xhxd.messagecenter.components.SmsManager;
+import com.xhxd.messagecenter.components.SpringApplicationContext;
 import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
-import com.xhxd.messagecenter.service.redis.RedisService;
 import com.xhxd.messagecenter.service.SmsService;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+@Slf4j
 public class WelinkServiceServiceImpl implements SmsService {
 
-    @Autowired
+
     private com.xhxd.messagecenter.components.SmsManager smsManager;
 
-    @Autowired
-    private RedisService redisService;
-
-    @Autowired
     private com.xhxd.messagecenter.components.HttpClientUtils httpClientUtils;
 
 
+    public WelinkServiceServiceImpl() {
+        if(Objects.isNull(smsManager)){
+            smsManager = SpringApplicationContext.getBean(SmsManager.class);
+        }
+        if(Objects.isNull(httpClientUtils)){
+            httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
+        }
+    }
+
     @Override
     public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
-
-
-
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendVerificationDto.getMessageChannel()));
+        Map<String,String> headMap = new HashMap<>();
+        Map<String,String> formMap = new HashMap<>();
+        formMap.put("sname",channelDto.getUserName());
+        formMap.put("spwd", channelDto.getPassword());
+        formMap.put("scorpid","");
+        formMap.put("sprdid",channelDto.getSprdId());
+        formMap.put("sdst",sendVerificationDto.getMobileNumber());
+        formMap.put("smsg",sendVerificationDto.getMessageContent());
+        Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
+        String resultXml = "";
+        Integer state = 0;
+        if(response.isSuccessful()){
+            try {
+                resultXml = response.body().string();
+                log.info("短信接口返回信息 ----> " + resultXml);
+                Map<String, Object> resultMap = XmlUtil.xmlToMap(resultXml);
+                state = Integer.valueOf((Integer) resultMap.get("State"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                response.close();
+            }
+        }
     }
 
     @Override
@@ -41,20 +72,6 @@ public class WelinkServiceServiceImpl implements SmsService {
 
     @Override
     public void sendMessage(SendMessageDto sendMessageDto) {
-
     }
 
-    /**
-     * 发送短信验证码
-     * @param channelDto
-     * @param sendVerificationDto
-     * @return
-     */
-    //public int sendVerificationCode(String url,String userName,String password,String sprdId,String phoneNumber,String content){
-    public int sendVerificationCode( ChannelDto channelDto,SendVerificationDto sendVerificationDto){
-        Map<String,String> headMap = new HashMap<>();
-        String postData = "sname=" + channelDto.getUserName() + "&spwd=" + channelDto.getPassword() + "&scorpid=&sprdid="+channelDto.getSprdId()+"&sdst=" + sendVerificationDto.getMobileNumber() + "&smsg=" + sendVerificationDto.getMessageContent();
-        httpClientUtils.httpPostRes(channelDto.getUrl(),postData,headMap);
-        return 0;
-    }
 }
