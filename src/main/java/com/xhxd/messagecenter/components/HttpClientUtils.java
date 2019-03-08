@@ -233,11 +233,10 @@ public class HttpClientUtils {
     /**
      * post
      * @param url
-     * @param json
      * @return
      * @throws IOException
      */
-    public Response httpFormPostResponse(String url, String json,Map<String,String> headMap,Map<String,String> formMap) throws BusinessException {
+    public Response httpFormPostResponse(String url, Map<String,String> headMap,Map<String,String> formMap) throws BusinessException {
         Request.Builder builder = this.addHeaderMap(headMap);
 
         Request request = builder
