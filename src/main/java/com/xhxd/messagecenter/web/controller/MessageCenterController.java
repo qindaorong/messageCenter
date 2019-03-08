@@ -23,15 +23,11 @@ import java.util.Map;
 @Slf4j
 public class MessageCenterController {
 
-
     @Autowired
     private SmsService smsService;
 
-    @Autowired
-    private RedisHandler redisHandler;
-
     @PostMapping(value="/sendMessage")
-    @RequestLimit(count = 1)
+    @RequestLimit
     public ResponseResult<String> sendMessage(@RequestBody SendMessageDto sendMessageDto){
 
         try {
@@ -43,10 +39,11 @@ public class MessageCenterController {
     }
 
     @PostMapping(value="/sendVerificationCode")
+    @RequestLimit
     public ResponseResult<String> sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
-            smsService.sendVerificationCode(sendVerificationDto);
+            //smsService.sendVerificationCode(sendVerificationDto);
             return ResponseResult.success("success");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());

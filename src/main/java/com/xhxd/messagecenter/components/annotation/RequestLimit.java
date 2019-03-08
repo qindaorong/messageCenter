@@ -20,4 +20,11 @@ public @interface RequestLimit {
      * 时间段，多少时间段内运行访问count次
      */
     int time() default 1;
+
+
+    /**
+     * 验证码单位时间发送次数
+     * @return
+     */
+    int verificationLimit() default 1;
 }
