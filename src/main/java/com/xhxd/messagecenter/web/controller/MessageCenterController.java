@@ -4,12 +4,15 @@ import com.xhxd.messagecenter.common.bean.ResponseResult;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import com.xhxd.messagecenter.common.util.Md5Utils;
 import com.xhxd.messagecenter.components.HttpClientUtils;
+import com.xhxd.messagecenter.components.RedisHandler;
+import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import com.xhxd.messagecenter.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,10 +27,15 @@ public class MessageCenterController {
     @Autowired
     private SmsService smsService;
 
+    @Autowired
+    private RedisHandler redisHandler;
+
     @PostMapping(value="/sendMessage")
+    @RequestLimit(count = 1)
     public ResponseResult<String> sendMessage(@RequestBody SendMessageDto sendMessageDto){
 
         try {
+
             return ResponseResult.success("");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());

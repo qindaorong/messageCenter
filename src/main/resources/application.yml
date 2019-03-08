@@ -10,10 +10,6 @@ spring:
     host: 39.105.171.244
     port: 6379
     password: QMSc3F
-    pool:
-      max-active: 8
-      max-idle: 1
-      max-wait: 100000
     timeout: 3000
 
 swagger:
