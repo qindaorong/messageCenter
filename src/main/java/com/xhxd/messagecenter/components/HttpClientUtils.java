@@ -1,7 +1,5 @@
 package com.xhxd.messagecenter.components;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +8,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 
 @Component
 public class HttpClientUtils {
@@ -116,10 +112,15 @@ public class HttpClientUtils {
 
 
 
-    private void addHeaderMap(Request.Builder builder ,Map<String,String> headMap){
-        for (Map.Entry<String, String> entry : headMap.entrySet()) {
-            builder.addHeader(entry.getKey(),entry.getValue());
+    private Request.Builder addHeaderMap(Map<String,String> headMap){
+
+        Request.Builder builder = new Request.Builder();
+        if(!CollectionUtils.isEmpty(headMap)){
+            for (Map.Entry<String, String> entry : headMap.entrySet()) {
+                builder.addHeader(entry.getKey(),entry.getValue());
+            }
         }
+        return builder;
     }
 
 
@@ -130,10 +131,7 @@ public class HttpClientUtils {
      * @throws IOException
      */
     public Response httpGetResponse(String url,Map<String,String> headMap) throws BusinessException {
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
 
         Request request = builder
                 .url(url)
@@ -159,10 +157,8 @@ public class HttpClientUtils {
     public Response httpPostResponse(String url, String json,Map<String,String> headMap) throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
+
 
         Request request = builder
                 .url(url)
@@ -189,10 +185,8 @@ public class HttpClientUtils {
     public Response httpPutResponse(String url, String json,Map<String,String> headMap) throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
+
 
         Request request = builder
                 .url(url)
@@ -218,10 +212,8 @@ public class HttpClientUtils {
     public Response httpDeleteResponse(String url,String json,Map<String,String> headMap)throws BusinessException {
         RequestBody requestBody = RequestBody.create(JSON, json);
 
-        Request.Builder builder = new Request.Builder();
-        if(!CollectionUtils.isEmpty(headMap)){
-            this.addHeaderMap(builder,headMap);
-        }
+        Request.Builder builder = this.addHeaderMap(headMap);
+
 
         Request request = builder
                 .url(url)
@@ -236,33 +228,6 @@ public class HttpClientUtils {
         return response;
     }
 
-    /**
-     * get
-     * @param url
-     * @return
-     * @throws IOException
-     */
-    public JSONObject httpGetResponse(String url, Map<String,String> headMap, Function<Response, JSONObject> function){
-        Response response = null;
-        try{
-            Request.Builder builder = new Request.Builder();
-            if(!CollectionUtils.isEmpty(headMap)){
-                this.addHeaderMap(builder,headMap);
-            }
-
-            Request request = builder
-                    .url(url)
-                    .build();
-            response = okHttpClient.newCall(request).execute();
-            return function.apply(response);
-        }catch(IOException e){
-            throw new BusinessException(e);
-        }finally {
-            if(Objects.isNull(response)){
-                response.close();
-            }
-        }
-    }
 
 
     /**
@@ -272,122 +237,30 @@ public class HttpClientUtils {
      * @return
      * @throws IOException
      */
-    public JSONObject httpPostResponse(String url, String json, Map<String,String> headMap, Function<Response, JSONObject> function){
-        Response response = null;
-        try {
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            Request.Builder builder = new Request.Builder();
-            if (!CollectionUtils.isEmpty(headMap)) {
-                this.addHeaderMap(builder, headMap);
-            }
+    public Response httpFormPostResponse(String url, String json,Map<String,String> headMap,Map<String,String> formMap) throws BusinessException {
+        Request.Builder builder = this.addHeaderMap(headMap);
 
-            Request request = builder
-                    .url(url)
-                    .post(requestBody)
-                    .build();
+        Request request = builder
+                .url(url)
+                .post(this.addFormBody(formMap))
+                .build();
+        Response response ;
+
+        try {
             response = okHttpClient.newCall(request).execute();
-            return function.apply(response);
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new BusinessException(e);
-        }finally {
-            if(Objects.isNull(response)){
-                response.close();
-            }
         }
+        return response;
     }
 
-    /**
-     * post
-     * @param url
-     * @param json
-     * @param headMap
-     * @param function
-     * @return
-     */
-    public JSONArray httpPostResponseArray(String url, String json, Map<String,String> headMap, Function<Response, JSONArray> function){
-        Response response = null;
-        try {
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            Request.Builder builder = new Request.Builder();
-            if (!CollectionUtils.isEmpty(headMap)) {
-                this.addHeaderMap(builder, headMap);
-            }
-
-            Request request = builder
-                    .url(url)
-                    .post(requestBody)
-                    .build();
-            response = okHttpClient.newCall(request).execute();
-            return function.apply(response);
-        }catch(IOException e){
-            throw new BusinessException(e);
-        }finally {
-            if(Objects.isNull(response)){
-                response.close();
-            }
+    private FormBody addFormBody(Map<String,String> formMap){
+        FormBody.Builder builder = new FormBody.Builder();
+        for (String key : formMap.keySet()) {
+            //追加表单信息
+            builder.add(key, formMap.get(key));
         }
+        return builder.build();
     }
 
-
-    /**
-     * put
-     * @param url
-     * @param json
-     * @return
-     * @throws IOException
-     */
-    public JSONObject httpPutResponse(String url, String json, Map<String,String> headMap, Function<Response, JSONObject> function) {
-        Response response = null;
-        try {
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            Request.Builder builder = new Request.Builder();
-            if (!CollectionUtils.isEmpty(headMap)) {
-                this.addHeaderMap(builder, headMap);
-            }
-
-            Request request = builder
-                    .url(url)
-                    .put(requestBody)
-                    .build();
-            response = okHttpClient.newCall(request).execute();
-            return function.apply(response);
-        }catch(IOException e){
-            throw new BusinessException(e);
-        }finally {
-            if(Objects.isNull(response)){
-                response.close();
-            }
-        }
-    }
-
-    /**
-     * delete
-     * @param url
-     * @param json
-     * @return
-     * @throws IOException
-     */
-    public JSONObject httpDeleteResponse(String url, String json, Map<String,String> headMap, Function<Response, JSONObject> function){
-        Response response = null;
-        try {
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            Request.Builder builder = new Request.Builder();
-            if (!CollectionUtils.isEmpty(headMap)) {
-                this.addHeaderMap(builder, headMap);
-            }
-
-            Request request = builder
-                    .url(url)
-                    .delete(requestBody)
-                    .build();
-            response = okHttpClient.newCall(request).execute();
-            return function.apply(response);
-        }catch(IOException e){
-            throw new BusinessException(e);
-        }finally {
-            if(Objects.isNull(response)){
-                response.close();
-            }
-        }
-    }
 }
