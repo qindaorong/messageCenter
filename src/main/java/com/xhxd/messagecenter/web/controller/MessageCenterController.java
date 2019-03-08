@@ -27,11 +27,10 @@ public class MessageCenterController {
     private SmsService smsService;
 
     @PostMapping(value="/sendMessage")
-    @RequestLimit
     public ResponseResult<String> sendMessage(@RequestBody SendMessageDto sendMessageDto){
 
         try {
-
+            smsService.sendMessage(sendMessageDto);
             return ResponseResult.success("");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
@@ -39,11 +38,10 @@ public class MessageCenterController {
     }
 
     @PostMapping(value="/sendVerificationCode")
-    @RequestLimit
     public ResponseResult<String> sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
-            //smsService.sendVerificationCode(sendVerificationDto);
+            smsService.sendVerificationCode(sendVerificationDto);
             return ResponseResult.success("success");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());

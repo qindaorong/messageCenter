@@ -25,7 +25,7 @@ public class RequestLimitAspect {
     private RedisHandler redisHandler;
 
 
-    @Before("execution(public * com.xhxd.messagecenter.web.controller.*.*(..)) && @annotation(limit)")
+    @Before("execution(public * com.xhxd.messagecenter.service.*.*(..)) && @annotation(limit)")
     public void requestLimit(JoinPoint joinPoint, RequestLimit limit) {
 
         String mobileNumber="";
@@ -34,13 +34,17 @@ public class RequestLimitAspect {
 
         for(Object obj : args){
             if(obj instanceof SendMessageDto ){
-                mobileNumber = ((SendMessageDto)obj).getMobileNumber();
-                checkDailyRequestCount(mobileNumber,limit.time(),limit.count());
+                SendMessageDto sendMessageDto= ((SendMessageDto)obj);
+                mobileNumber = sendMessageDto.getMobileNumber();
+
+                checkDailyRequestCount(sendMessageDto.getMessageChannel(),mobileNumber,limit.time(),limit.count());
                 break;
             }
             if(obj instanceof SendVerificationDto){
-                mobileNumber = ((SendVerificationDto)obj).getMobileNumber();
-                ckeckVerificationCount(mobileNumber,limit.time(),limit.verificationLimit());
+                SendVerificationDto sendVerificationDto= ((SendVerificationDto)obj);
+                mobileNumber = sendVerificationDto.getMobileNumber();
+
+                ckeckVerificationCount(sendVerificationDto.getMessageChannel(),mobileNumber,limit.time(),limit.verificationLimit());
                 break;
             }
         }
@@ -53,8 +57,8 @@ public class RequestLimitAspect {
      * @param times
      * @param limit
      */
-    private void  checkDailyRequestCount(String mobileNumber,int times,int limit){
-        String key = "req_mobileNumber_limit_".concat(mobileNumber);
+    private void  checkDailyRequestCount(String channel,String mobileNumber,int times,int limit){
+        String key = channel.concat("_req_mobileNumber_limit_").concat(mobileNumber);
 
         //加1后看看值
         long count = redisHandler.increment(key,1);
@@ -75,8 +79,8 @@ public class RequestLimitAspect {
      * @param times
      * @param verificationLimit
      */
-    private void  ckeckVerificationCount(String mobileNumber,int times,int verificationLimit){
-        String key = "verification_mobileNumber_limit_".concat(mobileNumber);
+    private void  ckeckVerificationCount(String channel,String mobileNumber,int times,int verificationLimit){
+        String key = channel.concat("_verification_mobileNumber_limit_").concat(mobileNumber);
         //加1后看看值
         long count = redisHandler.increment(key,1);
 

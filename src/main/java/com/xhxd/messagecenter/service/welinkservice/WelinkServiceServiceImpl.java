@@ -5,6 +5,7 @@ import com.xhxd.messagecenter.common.util.XmlUtil;
 import com.xhxd.messagecenter.components.HttpClientUtils;
 import com.xhxd.messagecenter.components.SmsManager;
 import com.xhxd.messagecenter.components.SpringApplicationContext;
+import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
@@ -12,7 +13,6 @@ import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import com.xhxd.messagecenter.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ public class WelinkServiceServiceImpl implements SmsService {
     private com.xhxd.messagecenter.components.SmsManager smsManager;
 
     private com.xhxd.messagecenter.components.HttpClientUtils httpClientUtils;
-
 
     public WelinkServiceServiceImpl() {
         if(Objects.isNull(smsManager)){
@@ -51,7 +50,7 @@ public class WelinkServiceServiceImpl implements SmsService {
         formMap.put("sdst",sendVerificationDto.getMobileNumber());
         formMap.put("smsg",sendVerificationDto.getMessageContent());
 
-        Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
+        /*Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
         String resultXml = "";
         Integer state = 0;
         if(response.isSuccessful()){
@@ -65,7 +64,7 @@ public class WelinkServiceServiceImpl implements SmsService {
             }finally {
                 response.close();
             }
-        }
+        }*/
     }
 
     @Override
@@ -75,6 +74,7 @@ public class WelinkServiceServiceImpl implements SmsService {
 
     @Override
     public void sendMessage(SendMessageDto sendMessageDto) {
+
     }
 
 }

@@ -4,6 +4,7 @@ import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import com.xhxd.messagecenter.common.exception.ExceptionCode;
 import com.xhxd.messagecenter.components.SmsManager;
+import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
@@ -35,6 +36,7 @@ public class SmsServiceImpl implements SmsService {
 
 
     @Override
+    @RequestLimit
     public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
 
         if(Objects.isNull(sendVerificationDto)){
@@ -75,6 +77,7 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
+    @RequestLimit
     public void sendMessage(SendMessageDto sendMessageDto) {
 
         if(Objects.isNull(sendMessageDto)){

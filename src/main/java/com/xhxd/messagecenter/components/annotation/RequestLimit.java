@@ -1,5 +1,6 @@
 package com.xhxd.messagecenter.components.annotation;
 
+import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
@@ -10,7 +11,6 @@ import java.lang.annotation.*;
 @Documented
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public @interface RequestLimit {
-
     /**
      * 1天允许访问的次数
      */
