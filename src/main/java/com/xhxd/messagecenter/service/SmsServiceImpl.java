@@ -31,7 +31,7 @@ public class SmsServiceImpl implements SmsService {
 
     @PostConstruct
     public void init(){
-        serviceMap.put(ChannelEnum.WELINK.getName(),new WelinkServiceServiceImpl());
+        serviceMap.put(ChannelEnum.WELINK.getName(),WelinkServiceServiceImpl.getInstanceWelinkServiceService());
     }
 
 

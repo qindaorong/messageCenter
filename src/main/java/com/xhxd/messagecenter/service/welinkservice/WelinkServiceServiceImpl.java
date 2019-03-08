@@ -22,17 +22,20 @@ import java.util.Objects;
 @Slf4j
 public class WelinkServiceServiceImpl implements SmsService {
 
+    private static WelinkServiceServiceImpl welinkServiceService = null;
 
-    private com.xhxd.messagecenter.components.SmsManager smsManager;
+    private SmsManager smsManager;
 
-    private com.xhxd.messagecenter.components.HttpClientUtils httpClientUtils;
+    private HttpClientUtils httpClientUtils;
 
-    public WelinkServiceServiceImpl() {
-        if(Objects.isNull(smsManager)){
-            smsManager = SpringApplicationContext.getBean(SmsManager.class);
-        }
-        if(Objects.isNull(httpClientUtils)){
-            httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
+    private WelinkServiceServiceImpl() {
+        if(Objects.isNull(welinkServiceService)){
+            if(Objects.isNull(smsManager)){
+                smsManager = SpringApplicationContext.getBean(SmsManager.class);
+            }
+            if(Objects.isNull(httpClientUtils)){
+                httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
+            }
         }
     }
 
@@ -77,4 +80,11 @@ public class WelinkServiceServiceImpl implements SmsService {
 
     }
 
+
+    public static WelinkServiceServiceImpl getInstanceWelinkServiceService(){
+        if(Objects.isNull(welinkServiceService)){
+            welinkServiceService =  new WelinkServiceServiceImpl();
+        }
+        return welinkServiceService;
+    }
 }
