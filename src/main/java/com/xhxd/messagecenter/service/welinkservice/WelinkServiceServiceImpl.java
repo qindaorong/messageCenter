@@ -1,4 +1,4 @@
-package com.xhxd.messagecenter.service.aggregatedsms;
+package com.xhxd.messagecenter.service.welinkservice;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SmsServiceImpl implements SmsService {
+public class WelinkServiceServiceImpl implements SmsService {
 
     @Autowired
     private com.xhxd.messagecenter.components.SmsManager smsManager;
@@ -29,27 +29,8 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
-        if(null == sendVerificationDto){
-            throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
-        }
-        String messageContent = sendVerificationDto.getMessageContent();
-        String verificationCode = sendVerificationDto.getVerificationCode();
-        if(!StringUtils.isEmpty(messageContent) && !StringUtils.isEmpty(verificationCode)){
-            if(messageContent.indexOf("#code#") != -1){
-                messageContent =  messageContent.replace("#code#",verificationCode);
-                sendVerificationDto.setMessageContent(messageContent);
-            }
-        }
-        // 判断是那个通道
-        String code = ChannelEnum.getByName(sendVerificationDto.getMessageChannel());
-        ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
-        if(null != channelDto){
-            boolean flag = channelDto.getOpenSwitch();
-            if(!flag){
-                throw new BusinessException(ExceptionCode.CHANNEL_CLOSURE);
-            }
-            sendVerificationCode(channelDto,sendVerificationDto);
-        }
+
+
 
     }
 
