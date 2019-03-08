@@ -1,25 +1,21 @@
-package com.xhxd.messagecenter.service.aggregatedsms.impl;
+package com.xhxd.messagecenter.service.aggregatedsms;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import com.xhxd.messagecenter.common.exception.ExceptionCode;
-import com.xhxd.messagecenter.common.util.JsonUtil;
-import com.xhxd.messagecenter.components.HttpClientUtils;
-import com.xhxd.messagecenter.components.SmsManager;
 import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import com.xhxd.messagecenter.service.RedisService;
+import com.xhxd.messagecenter.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
-public class SmsService  implements com.xhxd.messagecenter.service.aggregatedsms.SmsService {
+public class SmsServiceImpl implements SmsService {
 
     @Autowired
     private com.xhxd.messagecenter.components.SmsManager smsManager;

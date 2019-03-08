@@ -1,11 +1,10 @@
-package com.xhxd.messagecenter.service.aggregatedsms;
+package com.xhxd.messagecenter.service;
 
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
 
 public interface SmsService {
-
     /**
      * 发送短信验证码
      * @param sendVerificationDto
@@ -24,6 +23,4 @@ public interface SmsService {
      * @param sendMessageDto
      */
     void  sendMessage(SendMessageDto sendMessageDto);
-
-
 }
