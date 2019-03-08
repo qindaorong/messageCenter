@@ -40,14 +40,17 @@ public class WelinkServiceServiceImpl implements SmsService {
     @Override
     public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendVerificationDto.getMessageChannel()));
+
         Map<String,String> headMap = new HashMap<>();
-        Map<String,String> formMap = new HashMap<>();
+
+        Map<String,String> formMap = new HashMap<>(6);
         formMap.put("sname",channelDto.getUserName());
         formMap.put("spwd", channelDto.getPassword());
         formMap.put("scorpid","");
         formMap.put("sprdid",channelDto.getSprdId());
         formMap.put("sdst",sendVerificationDto.getMobileNumber());
         formMap.put("smsg",sendVerificationDto.getMessageContent());
+
         Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
         String resultXml = "";
         Integer state = 0;
@@ -56,7 +59,7 @@ public class WelinkServiceServiceImpl implements SmsService {
                 resultXml = response.body().string();
                 log.info("短信接口返回信息 ----> " + resultXml);
                 Map<String, Object> resultMap = XmlUtil.xmlToMap(resultXml);
-                state = Integer.valueOf((Integer) resultMap.get("State"));
+                state = Integer.valueOf(String.valueOf(resultMap.get("State")));
             } catch (IOException e) {
                 e.printStackTrace();
             }finally {
