@@ -1,7 +1,5 @@
 package com.xhxd.messagecenter.components;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +8,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 
 @Component
 public class HttpClientUtils {
