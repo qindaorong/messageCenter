@@ -1,4 +1,4 @@
-package com.xhxd.messagecenter.service;
+package com.xhxd.messagecenter.service.redis;
 
 public interface RedisService {
     /**

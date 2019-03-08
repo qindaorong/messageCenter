@@ -7,7 +7,7 @@ import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
-import com.xhxd.messagecenter.service.RedisService;
+import com.xhxd.messagecenter.service.redis.RedisService;
 import com.xhxd.messagecenter.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;

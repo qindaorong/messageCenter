@@ -1,6 +1,6 @@
-package com.xhxd.messagecenter.service.impl;
+package com.xhxd.messagecenter.service.redis.impl;
 
-import com.xhxd.messagecenter.service.RedisService;
+import com.xhxd.messagecenter.service.redis.RedisService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
