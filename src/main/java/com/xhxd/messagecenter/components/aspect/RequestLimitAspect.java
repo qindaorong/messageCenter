@@ -1,6 +1,7 @@
 package com.xhxd.messagecenter.components.aspect;
 
 import com.xhxd.messagecenter.common.exception.BusinessException;
+import com.xhxd.messagecenter.common.exception.ExceptionCode;
 import com.xhxd.messagecenter.components.RedisHandler;
 import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.SendMessageDto;
@@ -69,7 +70,7 @@ public class RequestLimitAspect {
             redisHandler.expire(key,times,TimeUnit.DAYS);
         }
         if (count > limit) {
-            throw new BusinessException(10001,"超出访问次数限制");
+            throw new BusinessException(ExceptionCode.DAILY_CODE_UPPER_LIMIT);
         }
     }
 
@@ -90,7 +91,7 @@ public class RequestLimitAspect {
             redisHandler.expire(key,times,TimeUnit.MINUTES);
         }
         if (count > verificationLimit) {
-            throw new BusinessException(10002,"验证码发送过于频繁，请1分钟后再次发送！");
+            throw new BusinessException(ExceptionCode.ONE_MIN_SERVICE_ERROR);
         }
     }
 

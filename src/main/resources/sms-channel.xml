@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <channels>
-    <channel id="1" open-switch="true" url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit" sprd-id="1012888">
+    <channel id="1" open-switch="true" url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit" sprd-id="1012888" verification-code-from = "local">
         <user name="dlbjxhhd" password="jRWS9C6s"/>
     </channel>
 </channels>

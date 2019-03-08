@@ -1,6 +1,9 @@
 package com.xhxd.messagecenter.service.welinkservice;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
+import com.xhxd.messagecenter.common.exception.BusinessException;
+import com.xhxd.messagecenter.common.exception.CodeMessage;
+import com.xhxd.messagecenter.common.exception.ExceptionCode;
 import com.xhxd.messagecenter.common.util.XmlUtil;
 import com.xhxd.messagecenter.components.HttpClientUtils;
 import com.xhxd.messagecenter.components.SmsManager;
@@ -40,7 +43,7 @@ public class WelinkServiceServiceImpl implements SmsService {
     }
 
     @Override
-    public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
+    public  Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendVerificationDto.getMessageChannel()));
 
         Map<String,String> headMap = new HashMap<>();
@@ -53,7 +56,7 @@ public class WelinkServiceServiceImpl implements SmsService {
         formMap.put("sdst",sendVerificationDto.getMobileNumber());
         formMap.put("smsg",sendVerificationDto.getMessageContent());
 
-        /*Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
+        Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
         String resultXml = "";
         Integer state = 0;
         if(response.isSuccessful()){
@@ -62,12 +65,22 @@ public class WelinkServiceServiceImpl implements SmsService {
                 log.info("短信接口返回信息 ----> " + resultXml);
                 Map<String, Object> resultMap = XmlUtil.xmlToMap(resultXml);
                 state = Integer.valueOf(String.valueOf(resultMap.get("State")));
+                if(state != 0){
+                    CodeMessage codeMessage = new CodeMessage();
+                    codeMessage.setCode(6010);
+                    codeMessage.setMessage(String.valueOf(resultMap.get("State")));
+                    throw  new BusinessException(codeMessage);
+                }else{
+                    return  Boolean.TRUE;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+                throw  new BusinessException(ExceptionCode.SMS_SERVICE_ERROR);
             }finally {
                 response.close();
             }
-        }*/
+        }
+        return  Boolean.FALSE;
     }
 
     @Override

@@ -101,7 +101,7 @@ public class ExceptionCode {
     /**
      * 发送验证码次数上限
      */
-    public static final CodeMessage CODE_SERVICE_ERROR = new CodeMessage(6002, "发送验证码次数上限");
+    public static final CodeMessage ONE_MIN_SERVICE_ERROR = new CodeMessage(6002, "一分钟内不能重复发送");
 
     /**
      * 短信验证已过期
@@ -123,11 +123,11 @@ public class ExceptionCode {
     /**
      * 发送次数上限
      */
-    public static final CodeMessage CODE_UPPER_LIMIT = new CodeMessage(6006, "发送次数上限");
+    public static final CodeMessage DAILY_CODE_UPPER_LIMIT = new CodeMessage(6006, "当天发送次数上限");
 
 
     /**
-     * 发送次数上限
+     * 请求信息不能为空
      */
     public static final CodeMessage MESSAGE_NOT_NULL = new CodeMessage(6007, "请求信息不能为空");
 
@@ -135,6 +135,15 @@ public class ExceptionCode {
      * 该通道已关闭
      */
     public static final CodeMessage CHANNEL_CLOSURE = new CodeMessage(6008, "该通道已关闭");
+
+    /**
+     * 该通道不存在
+     */
+    public static final CodeMessage  CHANNEL_EXISTENT = new CodeMessage(6009, "该通道不存在");
+
+
+
+
 
 
 

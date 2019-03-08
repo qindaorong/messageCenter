@@ -20,6 +20,8 @@ public class ChannelDto {
 
     private String sprdId;
 
+    private String verificationCodeFrom;
+
     private String userName;
 
     private String password;
@@ -31,6 +33,7 @@ public class ChannelDto {
         this.openSwitch = xmlChannel.getOpenSwitch();
         this.url = xmlChannel.getUrl();
         this.sprdId = xmlChannel.getSprdId();
+        this.verificationCodeFrom = xmlChannel.getVerificationCodeFrom();
         this.userName = xmlChannel.getXmlUser().getName();
         this.password = xmlChannel.getXmlUser().getPassword();
     }

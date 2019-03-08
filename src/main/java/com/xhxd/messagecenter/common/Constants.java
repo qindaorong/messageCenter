@@ -11,4 +11,10 @@ public class Constants {
         public static final String TRUE ="true";
         public static final String FLASE ="false";
     }
+
+    public static class ExceptonMsg{
+
+        public static final String SECURITY_MSG ="[client_key] or [client_secret] Can not be empty ";
+
+    }
 }

@@ -1,8 +1,10 @@
 package com.xhxd.messagecenter.service;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
+import com.xhxd.messagecenter.common.enums.ChannelVeriEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import com.xhxd.messagecenter.common.exception.ExceptionCode;
+import com.xhxd.messagecenter.components.RedisHandler;
 import com.xhxd.messagecenter.components.SmsManager;
 import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.ChannelDto;
@@ -27,6 +29,10 @@ public class SmsServiceImpl implements SmsService {
     private Map<String,SmsService> serviceMap = new HashMap<>();
 
     @Autowired
+    private RedisHandler redisHandler;
+
+
+    @Autowired
     private SmsManager smsManager;
 
     @PostConstruct
@@ -37,7 +43,7 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     @RequestLimit
-    public void sendVerificationCode(SendVerificationDto sendVerificationDto) {
+    public Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
 
         if(Objects.isNull(sendVerificationDto)){
             throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
@@ -56,10 +62,14 @@ public class SmsServiceImpl implements SmsService {
             }
         }
         //send message
-        serviceMap.get(sendVerificationDto.getMessageChannel()).sendVerificationCode(sendVerificationDto);
-
-        //save verificationCode and mobileNumber into redis
-
+        Boolean flag = serviceMap.get(sendVerificationDto.getMessageChannel()).sendVerificationCode(sendVerificationDto);
+        if(flag){
+            //save verificationCode and mobileNumber into redis
+            redisHandler.setForTimeMIN(sendVerificationDto.getMobileNumber(),sendVerificationDto.getVerificationCode(),10);
+        }else {
+            throw new BusinessException(ExceptionCode.MESSAGE_SERVICE_ERROR);
+        }
+        return  Boolean.TRUE;
     }
 
     @Override
@@ -70,10 +80,24 @@ public class SmsServiceImpl implements SmsService {
 
         //check SMS channels
         this.checkChannel(verificationCodeDto.getMessageChannel());
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(verificationCodeDto.getMessageChannel());
 
-        serviceMap.get(verificationCodeDto.getMessageChannel()).checkVerificationCode(verificationCodeDto);
-
+        // local check code
+        if(ChannelVeriEnum.LOCAL.getName().equalsIgnoreCase(channelDto.getVerificationCodeFrom())){
+            String  codeValue = redisHandler.get(verificationCodeDto.getMobileNumber());
+            if(StringUtils.isEmpty(codeValue)){
+                throw new BusinessException(ExceptionCode.CODE_EXPIRATION);
+            }
+            if(!codeValue.equalsIgnoreCase(verificationCodeDto.getVerificationCode())){
+                throw new BusinessException(ExceptionCode.CODE_ERROR);
+            }
+            redisHandler.remove(verificationCodeDto.getMobileNumber());
+        }else{
+            serviceMap.get(verificationCodeDto.getMessageChannel()).checkVerificationCode(verificationCodeDto);
+        }
         //delete verificationCode and mobileNumber from  redis
+
+
     }
 
     @Override
@@ -100,7 +124,7 @@ public class SmsServiceImpl implements SmsService {
                 throw new BusinessException(ExceptionCode.CHANNEL_CLOSURE);
             }
         }else {
-            //TODO  通道不存在
+            throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
         }
         return Boolean.TRUE;
     }

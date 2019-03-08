@@ -23,6 +23,10 @@ public class XmlChannel {
     @XmlAttribute(name = "sprd-id")
     private String sprdId;
 
+    @XmlAttribute(name = "verification-code-from")
+    private String verificationCodeFrom;
+
+
     @XmlElement(name = "user")
     private XmlUser xmlUser;
 }

@@ -23,8 +23,6 @@ import java.util.Map;
 @Slf4j
 public class RequestFilter implements Filter, EnvironmentAware {
 
-    private final static String SECURITY_MSG = "[client_key] or [client_secret] is incorrect";
-
     private static final String ENV_CLIENT = "message.client.";
 
     private RelaxedPropertyResolver propertyResolver;
@@ -32,7 +30,14 @@ public class RequestFilter implements Filter, EnvironmentAware {
     private static final String CLIENT_SECRET = "secret";
 
 
+    /**
+     * server key
+     */
     private String serverKey;
+
+    /**
+     * server secret
+     */
     private String serverSecret;
 
     @Override
@@ -48,7 +53,7 @@ public class RequestFilter implements Filter, EnvironmentAware {
 
         Map<String,String> requestSecurityValue = this.getHeaderMap(request);
         if(!checkVerifyCode(requestSecurityValue)){
-            response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED,SECURITY_MSG);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,Constants.ExceptonMsg.SECURITY_MSG);
             return ;
         }
         filterChain.doFilter(servletRequest, servletResponse);

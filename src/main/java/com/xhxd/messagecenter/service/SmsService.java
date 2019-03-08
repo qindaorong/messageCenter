@@ -9,17 +9,17 @@ public interface SmsService {
      * 发送短信验证码
      * @param sendVerificationDto
      */
-    void  sendVerificationCode(SendVerificationDto sendVerificationDto);
+    Boolean  sendVerificationCode(SendVerificationDto sendVerificationDto);
 
     /**
-     * 发送短信验证码
+     * 验证验证码信息
      * @param verificationCodeDto
      */
     void  checkVerificationCode(VerificationCodeDto verificationCodeDto);
 
 
     /**
-     * 发送短信验证码
+     * 发送短信信息
      * @param sendMessageDto
      */
     void  sendMessage(SendMessageDto sendMessageDto);
