@@ -29,10 +29,10 @@ public class MessageCenterController {
     private SmsService smsService;
 
     @PostMapping(value="/sendMessage")
-    public Object sendMessage(@RequestBody SendMessageDto sendMessageDto){
+    public ResponseResult sendMessage(@RequestBody SendMessageDto sendMessageDto){
         try {
             smsService.sendMessage(sendMessageDto);
-            return ExceptionCode.OK;
+            return ResponseResult.success(null);
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
@@ -43,7 +43,7 @@ public class MessageCenterController {
 
         try {
             smsService.sendVerificationCode(sendVerificationDto);
-            return ExceptionCode.OK;
+            return ResponseResult.success(null);
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
@@ -53,7 +53,7 @@ public class MessageCenterController {
     public Object checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
         try {
             smsService.checkVerificationCode(verificationCodeDto);
-            return ExceptionCode.OK;
+            return ResponseResult.success(null);
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode() , e.getMessage());
         }
