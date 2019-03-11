@@ -11,7 +11,7 @@ import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
-import com.xhxd.messagecenter.service.welinkservice.WelinkServiceServiceImpl;
+import com.xhxd.messagecenter.service.welinkservice.WelinkServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class SmsServiceImpl implements SmsService {
 
     @PostConstruct
     public void init(){
-        serviceMap.put(ChannelEnum.WELINK.getName(),WelinkServiceServiceImpl.getInstanceWelinkServiceService());
+        serviceMap.put(ChannelEnum.WELINK.getName(), WelinkServiceImpl.getInstanceWelinkServiceService());
     }
 
 
@@ -92,11 +92,12 @@ public class SmsServiceImpl implements SmsService {
             if(!codeValue.equalsIgnoreCase(verificationCodeDto.getVerificationCode())){
                 throw new BusinessException(ExceptionCode.CODE_ERROR);
             }
+
+            //delete verificationCode and mobileNumber from  redis
             redisHandler.remove(verificationCodeDto.getMobileNumber());
         }else{
             serviceMap.get(verificationCodeDto.getMessageChannel()).checkVerificationCode(verificationCodeDto);
         }
-        //delete verificationCode and mobileNumber from  redis
 
 
     }

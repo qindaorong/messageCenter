@@ -8,7 +8,6 @@ import com.xhxd.messagecenter.common.util.XmlUtil;
 import com.xhxd.messagecenter.components.HttpClientUtils;
 import com.xhxd.messagecenter.components.SmsManager;
 import com.xhxd.messagecenter.components.SpringApplicationContext;
-import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
@@ -23,15 +22,15 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class WelinkServiceServiceImpl implements SmsService {
+public class WelinkServiceImpl implements SmsService {
 
-    private static WelinkServiceServiceImpl welinkServiceService = null;
+    private static WelinkServiceImpl welinkServiceService = null;
 
     private SmsManager smsManager;
 
     private HttpClientUtils httpClientUtils;
 
-    private WelinkServiceServiceImpl() {
+    private WelinkServiceImpl() {
         if(Objects.isNull(welinkServiceService)){
             if(Objects.isNull(smsManager)){
                 smsManager = SpringApplicationContext.getBean(SmsManager.class);
@@ -94,9 +93,9 @@ public class WelinkServiceServiceImpl implements SmsService {
     }
 
 
-    public static WelinkServiceServiceImpl getInstanceWelinkServiceService(){
+    public static WelinkServiceImpl getInstanceWelinkServiceService(){
         if(Objects.isNull(welinkServiceService)){
-            welinkServiceService =  new WelinkServiceServiceImpl();
+            welinkServiceService =  new WelinkServiceImpl();
         }
         return welinkServiceService;
     }

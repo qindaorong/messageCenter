@@ -10,7 +10,8 @@ import lombok.Getter;
 @Getter
 public enum ChannelEnum {
 
-    WELINK("1","51welink");
+    WELINK("1","51welink"),
+    MOBILE ("2","mobile ");
 
 
     /**
