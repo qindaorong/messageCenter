@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +28,8 @@ public class ChannelDto {
 
     private String password;
 
+    private String keyWord;
+
 
 
     public void convert2ChannelDto(XmlChannel xmlChannel){
@@ -34,6 +38,7 @@ public class ChannelDto {
         this.url = xmlChannel.getUrl();
         this.sprdId = xmlChannel.getSprdId();
         this.verificationCodeFrom = xmlChannel.getVerificationCodeFrom();
+        this.keyWord = xmlChannel.getKeyWord();
         this.userName = xmlChannel.getXmlUser().getName();
         this.password = xmlChannel.getXmlUser().getPassword();
     }

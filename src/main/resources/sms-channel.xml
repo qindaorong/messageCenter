@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <channels>
-    <channel id="1" open-switch="true" url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit" sprd-id="1012888" verification-code-from = "local">
+    <channel id="1" open-switch="true"
+             url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit"
+             sprd-id="1012888"
+             verification-code-from = "local"
+             key-word = "【有趣花】,【美超拼团】,【星河金融管家】"
+    >
         <user name="dlbjxhhd" password="jRWS9C6s"/>
+       <!-- <key-words>
+            <words>【有趣花】</words>
+            <words>【美超拼团】</words>
+            <words>【星河金融管家】</words>
+        </key-words>-->
     </channel>
 </channels>
 

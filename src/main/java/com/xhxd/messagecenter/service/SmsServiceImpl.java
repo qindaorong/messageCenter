@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -51,6 +49,9 @@ public class SmsServiceImpl implements SmsService {
 
         //check SMS channels
         this.checkChannel(sendVerificationDto.getMessageChannel());
+
+        // check sms messageContent sign
+        this.checkChannelSign(sendVerificationDto.getMessageChannel(),sendVerificationDto.getMessageContent());
 
         //replace word of context
         String messageContent = sendVerificationDto.getMessageContent();
@@ -122,6 +123,31 @@ public class SmsServiceImpl implements SmsService {
             boolean flag = channelDto.getOpenSwitch();
             if(!flag){
                 throw new BusinessException(ExceptionCode.CHANNEL_CLOSURE);
+            }
+        }else {
+            throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
+        }
+        return Boolean.TRUE;
+    }
+
+
+    private Boolean  checkChannelSign(String messageChannel,String messageContent){
+        Boolean flag = false;
+        String code = ChannelEnum.getByName(messageChannel);
+        ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
+        if(null != channelDto){
+           String keyWord  = channelDto.getKeyWord();
+            if(!StringUtils.isEmpty(keyWord)){
+                if(keyWord.indexOf(",") != -1){
+                    String[] keyWords = keyWord.split(",");
+                    List<String>  wordList  = Arrays.asList(keyWords);
+                    flag = wordList.contains(messageContent);
+                    if(!flag){
+                        throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
+                    }
+                }
+            }else{
+                throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
             }
         }else {
             throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);

@@ -26,7 +26,10 @@ public class XmlChannel {
     @XmlAttribute(name = "verification-code-from")
     private String verificationCodeFrom;
 
+    @XmlAttribute(name = "key-word")
+    private String keyWord;
 
     @XmlElement(name = "user")
     private XmlUser xmlUser;
+
 }
