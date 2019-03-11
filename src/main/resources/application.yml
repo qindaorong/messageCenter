@@ -1,5 +1,7 @@
 server:
   port: 8150
+  tomcat:
+    max-http-header-size: 8192
 
 spring:
   application:
