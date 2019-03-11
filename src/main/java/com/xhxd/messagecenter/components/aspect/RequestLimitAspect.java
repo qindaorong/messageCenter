@@ -43,7 +43,7 @@ public class RequestLimitAspect {
                 SendVerificationDto sendVerificationDto= ((SendVerificationDto)obj);
                 mobileNumber = sendVerificationDto.getMobileNumber();
 
-                ckeckVerificationCount(sendVerificationDto.getMessageChannel(),mobileNumber,limit.time(),limit.verificationLimit());
+                checkVerificationCount(sendVerificationDto.getMessageChannel(),mobileNumber,limit.time(),limit.verificationLimit());
                 break;
             }
         }
@@ -78,7 +78,7 @@ public class RequestLimitAspect {
      * @param times
      * @param verificationLimit
      */
-    private void  ckeckVerificationCount(String channel,String mobileNumber,int times,int verificationLimit){
+    private void  checkVerificationCount(String channel,String mobileNumber,int times,int verificationLimit){
         String key = channel.concat("_verification_mobileNumber_limit_").concat(mobileNumber);
         //加1后看看值
         long count = redisHandler.increment(key,1);
