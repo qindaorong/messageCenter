@@ -15,7 +15,7 @@ public class Constants {
     public static class ExceptonMsg{
 
         public static final Integer SECURITY_CODE = 0000000 ;
-        public static final String SECURITY_MSG ="服务器繁忙，请稍后重试";
+        public static final String SECURITY_MSG ="未授权，请检查授权请求参数！";
 
     }
 }

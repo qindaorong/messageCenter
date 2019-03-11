@@ -29,58 +29,35 @@ public class MessageCenterController {
     private SmsService smsService;
 
     @PostMapping(value="/sendMessage")
-    public ResponseResult sendMessage(@RequestBody SendMessageDto sendMessageDto){
-
+    public Object sendMessage(@RequestBody SendMessageDto sendMessageDto){
         try {
             smsService.sendMessage(sendMessageDto);
+            return ExceptionCode.OK;
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
-        return  ResponseResult.fail(Constants.ExceptonMsg.SECURITY_CODE,Constants.ExceptonMsg.SECURITY_MSG);
     }
 
     @PostMapping(value="/sendVerificationCode")
-    public ResponseResult sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
+    public Object sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
             smsService.sendVerificationCode(sendVerificationDto);
+            return ExceptionCode.OK;
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
-        return  ResponseResult.fail(Constants.ExceptonMsg.SECURITY_CODE,Constants.ExceptonMsg.SECURITY_MSG);
     }
 
     @PostMapping(value="/checkVerificationCode")
-    public ResponseResult checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
+    public Object checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
         try {
             smsService.checkVerificationCode(verificationCodeDto);
+            return ExceptionCode.OK;
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode() , e.getMessage());
         }
-        return  ResponseResult.fail(Constants.ExceptonMsg.SECURITY_CODE,Constants.ExceptonMsg.SECURITY_MSG);
     }
-
-
-
-
-    /*@GetMapping(value="/test" )
-    public ResponseResult<String> test(){
-        try {
-
-            String str = Md5Utils.md5("xhjf_v1!#@messageServer");
-
-            String jsonStr = "";
-            Map<String,String> map = new HashMap<>(2);
-            map.put("client_key","xhjf-service");
-            map.put("client_secret", str);
-            httpClientUtils.httpPost("http://127.0.0.1:8080/api/sendMessage",jsonStr,map);
-
-            return ResponseResult.success("");
-        }catch (BusinessException e){
-            return ResponseResult.fail(e.getCode() , e.getMessage());
-        }
-
-    }*/
 
 
 }

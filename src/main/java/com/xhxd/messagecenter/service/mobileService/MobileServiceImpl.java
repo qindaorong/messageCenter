@@ -46,7 +46,26 @@ public class MobileServiceImpl implements SmsService {
     @Override
     public  Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendVerificationDto.getMessageChannel()));
+        Boolean flag = sendMessagParam(channelDto,sendVerificationDto.getMessageContent(),sendVerificationDto.getMobileNumber());
+        if(flag){
+            return Boolean.TRUE;
+        }else {
+            return  Boolean.FALSE;
+        }
+    }
 
+    @Override
+    public void checkVerificationCode(VerificationCodeDto verificationCodeDto) {
+
+    }
+
+    @Override
+    public void sendMessage(SendMessageDto sendMessageDto) {
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendMessageDto.getMessageChannel()));
+        sendMessagParam(channelDto,sendMessageDto.getMessageContent(),sendMessageDto.getMobileNumber());
+    }
+
+    public Boolean sendMessagParam(ChannelDto channelDto,String messageContent,String mobileNumber){
         Map<String,String> headMap = new HashMap<>();
 
         Map<String,String> formMap = new HashMap<>(8);
@@ -54,8 +73,8 @@ public class MobileServiceImpl implements SmsService {
         formMap.put("loginName", channelDto.getUserName());
         formMap.put("pwd", Md5Utils.md5(channelDto.getPassword()));
         formMap.put("ext", StringUtils.EMPTY);
-        formMap.put("content",sendVerificationDto.getMessageContent());
-        formMap.put("mobileList",sendVerificationDto.getMobileNumber());
+        formMap.put("content",messageContent);
+        formMap.put("mobileList",mobileNumber);
         formMap.put("sendTime",StringUtils.EMPTY);
         formMap.put("userId",StringUtils.EMPTY);
 
@@ -84,16 +103,7 @@ public class MobileServiceImpl implements SmsService {
             }
         }
         return  Boolean.FALSE;
-    }
 
-    @Override
-    public void checkVerificationCode(VerificationCodeDto verificationCodeDto) {
-
-    }
-
-    @Override
-    public void sendMessage(SendMessageDto sendMessageDto) {
-        //TODO
     }
 
 
