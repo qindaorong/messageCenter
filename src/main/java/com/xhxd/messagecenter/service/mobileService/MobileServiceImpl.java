@@ -46,7 +46,7 @@ public class MobileServiceImpl implements SmsService {
     @Override
     public  Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendVerificationDto.getMessageChannel()));
-        Boolean flag = sendMessagParam(channelDto,sendVerificationDto.getMessageContent(),sendVerificationDto.getMobileNumber());
+        Boolean flag = sendMessageParam(channelDto,sendVerificationDto.getMessageContent(),sendVerificationDto.getMobileNumber());
         if(flag){
             return Boolean.TRUE;
         }else {
@@ -62,10 +62,10 @@ public class MobileServiceImpl implements SmsService {
     @Override
     public void sendMessage(SendMessageDto sendMessageDto) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendMessageDto.getMessageChannel()));
-        sendMessagParam(channelDto,sendMessageDto.getMessageContent(),sendMessageDto.getMobileNumber());
+        sendMessageParam(channelDto,sendMessageDto.getMessageContent(),sendMessageDto.getMobileNumber());
     }
 
-    public Boolean sendMessagParam(ChannelDto channelDto,String messageContent,String mobileNumber){
+    public Boolean sendMessageParam(ChannelDto channelDto, String messageContent, String mobileNumber){
         Map<String,String> headMap = new HashMap<>();
 
         Map<String,String> formMap = new HashMap<>(8);
