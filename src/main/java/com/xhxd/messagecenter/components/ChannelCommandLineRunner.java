@@ -16,9 +16,6 @@ import org.springframework.stereotype.Component;
 public class ChannelCommandLineRunner implements CommandLineRunner {
 
     @Override
-    public void run(String... args) throws Exception {
-        String str = Md5Utils.md5("xhjf_v1!#@messageServer");
-
-        log.debug("[client_secret] is :{}",str);
+    public void run(String... args){
     }
 }

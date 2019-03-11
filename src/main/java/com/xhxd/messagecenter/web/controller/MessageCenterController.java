@@ -12,6 +12,7 @@ import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import com.xhxd.messagecenter.service.SmsService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,6 +30,7 @@ public class MessageCenterController {
     private SmsService smsService;
 
     @PostMapping(value="/sendMessage")
+    @ApiOperation(value="发送短信信息",httpMethod = "POST", notes = "SendMessageDto  请求实体 具体参数以文档说明为参考")
     public ResponseResult sendMessage(@RequestBody SendMessageDto sendMessageDto){
         try {
             smsService.sendMessage(sendMessageDto);
@@ -39,6 +41,7 @@ public class MessageCenterController {
     }
 
     @PostMapping(value="/sendVerificationCode")
+    @ApiOperation(value="验证短信验证码",httpMethod = "POST", notes = "SendVerificationDto -- 请求实体 具体参数以文档说明为参考")
     public Object sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
@@ -49,7 +52,9 @@ public class MessageCenterController {
         }
     }
 
+
     @PostMapping(value="/checkVerificationCode")
+    @ApiOperation(value="发送短信验证码",httpMethod = "POST", notes = "VerificationCodeDto  请求实体 具体参数以文档说明为参考")
     public Object checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
         try {
             smsService.checkVerificationCode(verificationCodeDto);

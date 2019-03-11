@@ -27,18 +27,23 @@ public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
 
-        ParameterBuilder param = new ParameterBuilder();
-        param.name("sessionId").description("sessionId").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-        List<Parameter> aParameters = new ArrayList<>();
+        ParameterBuilder param = null;
+        List<Parameter> parametersList = new ArrayList<>();
+        param = new ParameterBuilder();
+        param.name("client_key").description("client_key").modelRef(new ModelRef("string")).parameterType("header").required(true);
+        parametersList.add(param.build());
+        param = new ParameterBuilder();
+        param.name("client_secret").description("client_key").modelRef(new ModelRef("string")).parameterType("header").required(true);
+        parametersList.add(param.build());
 
-        aParameters.add(param.build());
+
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.xhxd.messagecenter.web.controller"))
                 .paths(PathSelectors.any())
                 .build().enable(enable)
-                .globalOperationParameters(aParameters);
+                .globalOperationParameters(parametersList);
     }
 
     private ApiInfo apiInfo() {
