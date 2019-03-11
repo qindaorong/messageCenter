@@ -50,11 +50,8 @@ public class SmsServiceImpl implements SmsService {
             throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
         }
 
-        //check SMS channels
-        this.checkChannel(sendVerificationDto.getMessageChannel());
-
-        // check sms messageContent sign
-        this.checkChannelSign(sendVerificationDto.getMessageChannel(),sendVerificationDto.getMessageContent());
+        // check sms channels messageContent sign
+        this.checkChannel(sendVerificationDto.getMessageChannel(),sendVerificationDto.getMessageContent());
 
         //replace word of context
         String messageContent = sendVerificationDto.getMessageContent();
@@ -83,8 +80,8 @@ public class SmsServiceImpl implements SmsService {
         }
 
         //check SMS channels
-        this.checkChannel(verificationCodeDto.getMessageChannel());
-        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(verificationCodeDto.getMessageChannel());
+        String code = ChannelEnum.getByName(verificationCodeDto.getMessageChannel());
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(code);
 
         // local check code
         if(ChannelVeriEnum.LOCAL.getName().equalsIgnoreCase(channelDto.getVerificationCodeFrom())){
@@ -112,11 +109,10 @@ public class SmsServiceImpl implements SmsService {
         if(Objects.isNull(sendMessageDto)){
             throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
         }
-        //check SMS channels
-        this.checkChannel(sendMessageDto.getMessageChannel());
 
-        // check sms messageContent sign
-        this.checkChannelSign(sendMessageDto.getMessageChannel(),sendMessageDto.getMessageContent());
+        // check sms channels messageContent sign
+        String code = ChannelEnum.getByName(sendMessageDto.getMessageChannel());
+        this.checkChannel(code,sendMessageDto.getMessageContent());
 
         serviceMap.get(sendMessageDto.getMessageChannel()).sendMessage(sendMessageDto);
 
@@ -124,23 +120,7 @@ public class SmsServiceImpl implements SmsService {
 
     }
 
-
-    private Boolean  checkChannel(String messageChannel) throws BusinessException{
-        String code = ChannelEnum.getByName(messageChannel);
-        ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
-        if(null != channelDto){
-            boolean flag = channelDto.getOpenSwitch();
-            if(!flag){
-                throw new BusinessException(ExceptionCode.CHANNEL_CLOSURE);
-            }
-        }else {
-            throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
-        }
-        return Boolean.TRUE;
-    }
-
-
-    private Boolean  checkChannelSign(String messageChannel,String messageContent){
+    private Boolean checkChannel(String messageChannel, String messageContent){
         String code = ChannelEnum.getByName(messageChannel);
         ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
         if(null != channelDto){

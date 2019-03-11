@@ -41,7 +41,7 @@ public class MessageCenterController {
     }
 
     @PostMapping(value="/sendVerificationCode")
-    @ApiOperation(value="验证短信验证码",httpMethod = "POST", notes = "SendVerificationDto -- 请求实体 具体参数以文档说明为参考")
+    @ApiOperation(value="发送短信验证码",httpMethod = "POST", notes = "SendVerificationDto -- 请求实体 具体参数以文档说明为参考")
     public Object sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
@@ -54,7 +54,7 @@ public class MessageCenterController {
 
 
     @PostMapping(value="/checkVerificationCode")
-    @ApiOperation(value="发送短信验证码",httpMethod = "POST", notes = "VerificationCodeDto  请求实体 具体参数以文档说明为参考")
+    @ApiOperation(value="验证短信验证码",httpMethod = "POST", notes = "VerificationCodeDto  请求实体 具体参数以文档说明为参考")
     public Object checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
         try {
             smsService.checkVerificationCode(verificationCodeDto);
