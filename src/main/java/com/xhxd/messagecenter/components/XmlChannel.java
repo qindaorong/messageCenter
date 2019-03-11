@@ -3,6 +3,7 @@ package com.xhxd.messagecenter.components;
 import lombok.Data;
 
 import javax.xml.bind.annotation.*;
+import java.util.List;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,10 +27,10 @@ public class XmlChannel {
     @XmlAttribute(name = "verification-code-from")
     private String verificationCodeFrom;
 
-    @XmlAttribute(name = "key-word")
-    private String keyWord;
-
     @XmlElement(name = "user")
     private XmlUser xmlUser;
 
+    @XmlElementWrapper(name = "key-words")
+    @XmlElement(name = "word")
+    private List<String> keyWordsList;
 }

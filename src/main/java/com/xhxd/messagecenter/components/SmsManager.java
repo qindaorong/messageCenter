@@ -30,8 +30,9 @@ public class SmsManager {
             xmlChannelList = com.hariexpress.framework.task.components.XmlBuilder.loadTasks();
             if(!CollectionUtils.isEmpty(xmlChannelList.getSmsChannelList())){
 
-                ChannelDto channelDto = new ChannelDto();
+                ChannelDto channelDto;
                 for(XmlChannel xmlChannel :xmlChannelList.getSmsChannelList()){
+                    channelDto = new ChannelDto();
                     channelDto.convert2ChannelDto(xmlChannel);
                     channelDtoMap.put(channelDto.getId(),channelDto);
                 }

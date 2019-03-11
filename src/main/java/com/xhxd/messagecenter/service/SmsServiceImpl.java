@@ -16,6 +16,7 @@ import com.xhxd.messagecenter.service.welinkservice.WelinkServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -42,7 +43,7 @@ public class SmsServiceImpl implements SmsService {
 
 
     @Override
-   // @RequestLimit
+    @RequestLimit
     public Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
 
         if(Objects.isNull(sendVerificationDto)){
@@ -135,19 +136,13 @@ public class SmsServiceImpl implements SmsService {
 
 
     private Boolean  checkChannelSign(String messageChannel,String messageContent){
-        Boolean flag = false;
         String code = ChannelEnum.getByName(messageChannel);
         ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
         if(null != channelDto){
-           String keyWord  = channelDto.getKeyWord();
-            if(!StringUtils.isEmpty(keyWord)){
-                if(keyWord.indexOf(",") != -1){
-                    String[] keyWords = keyWord.split(",");
-                    List<String>  wordList  = Arrays.asList(keyWords);
-                    flag = this.ifInclude(wordList,keyWord);
-                    if(!flag){
-                        throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
-                    }
+            if(!CollectionUtils.isEmpty(channelDto.getKeyWordsList())){
+                Boolean flag = this.ifInclude(channelDto.getKeyWordsList(),messageContent);
+                if(!flag){
+                    throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
                 }
             }
         }else {

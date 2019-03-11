@@ -28,9 +28,7 @@ public class ChannelDto {
 
     private String password;
 
-    private String keyWord;
-
-
+    private List<String> keyWordsList;
 
     public void convert2ChannelDto(XmlChannel xmlChannel){
         this.id = xmlChannel.getId();
@@ -38,7 +36,7 @@ public class ChannelDto {
         this.url = xmlChannel.getUrl();
         this.sprdId = xmlChannel.getSprdId();
         this.verificationCodeFrom = xmlChannel.getVerificationCodeFrom();
-        this.keyWord = xmlChannel.getKeyWord();
+        this.keyWordsList = xmlChannel.getKeyWordsList();
         this.userName = xmlChannel.getXmlUser().getName();
         this.password = xmlChannel.getXmlUser().getPassword();
     }

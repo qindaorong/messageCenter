@@ -4,9 +4,12 @@
     <channel id="1" open-switch="true"
              url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit"
              sprd-id="1012888"
-             verification-code-from = "local"
-             key-word = "【有趣花】,【美超拼团】,【星河金融管家】"
-    >
+             verification-code-from = "local">
+        <key-words>
+            <word>【有趣花】</word>
+            <word>【美超拼团】</word>
+            <word>【星河金融管家】</word>
+        </key-words>
         <user name="dlbjxhhd" password="jRWS9C6s"/>
     </channel>
 
@@ -15,8 +18,10 @@
              url="http://47.101.131.229:8084/SMSTool/BatchSend"
              sprd-id="BJXH"
              verification-code-from = "local"
-             key-word = ""
     >
+        <key-words>
+            <word>【有趣花】</word>
+        </key-words>
         <user name="1801" password="Bjxh1801."/>
     </channel>
 
