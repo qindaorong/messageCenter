@@ -11,7 +11,7 @@ import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
-import com.xhxd.messagecenter.service.welinkservice.MoblieServiceImpl;
+import com.xhxd.messagecenter.service.moblieService.MoblieServiceImpl;
 import com.xhxd.messagecenter.service.welinkservice.WelinkServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.xhxd.messagecenter.service.welinkservice;
+package com.xhxd.messagecenter.service.moblieService;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
