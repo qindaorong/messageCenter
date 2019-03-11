@@ -142,17 +142,25 @@ public class SmsServiceImpl implements SmsService {
                 if(keyWord.indexOf(",") != -1){
                     String[] keyWords = keyWord.split(",");
                     List<String>  wordList  = Arrays.asList(keyWords);
-                    flag = wordList.contains(messageContent);
+                    flag = this.ifInclude(wordList,keyWord);
                     if(!flag){
                         throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
                     }
                 }
-            }else{
-                throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
             }
         }else {
             throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
         }
         return Boolean.TRUE;
+    }
+
+
+    public  boolean ifInclude(List<String> list,String str){
+        for(int i=0; i<list.size(); i++){
+            if (list.get(i).indexOf(str) != -1) {
+                return true;
+            }
+        }
+        return false;
     }
 }
