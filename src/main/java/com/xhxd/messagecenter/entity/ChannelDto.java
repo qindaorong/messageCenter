@@ -20,6 +20,10 @@ public class ChannelDto {
 
     private String url;
 
+    /**
+     * Welink: 产品id
+     * Mobile：客户id
+     */
     private String sprdId;
 
     private String verificationCodeFrom;

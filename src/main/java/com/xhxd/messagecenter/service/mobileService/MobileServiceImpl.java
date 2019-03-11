@@ -1,4 +1,4 @@
-package com.xhxd.messagecenter.service.moblieService;
+package com.xhxd.messagecenter.service.mobileService;
 
 import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
@@ -24,15 +24,15 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class MoblieServiceImpl implements SmsService {
+public class MobileServiceImpl implements SmsService {
 
-    private static MoblieServiceImpl moblieService = null;
+    private static MobileServiceImpl moblieService = null;
 
     private SmsManager smsManager;
 
     private HttpClientUtils httpClientUtils;
 
-    private MoblieServiceImpl() {
+    private MobileServiceImpl() {
         if(Objects.isNull(moblieService)){
             if(Objects.isNull(smsManager)){
                 smsManager = SpringApplicationContext.getBean(SmsManager.class);
@@ -49,10 +49,10 @@ public class MoblieServiceImpl implements SmsService {
 
         Map<String,String> headMap = new HashMap<>();
 
-        Map<String,String> formMap = new HashMap<>(6);
-        formMap.put("corpId",channelDto.getSprdId());//客户id
-        formMap.put("loginName", channelDto.getUserName());//登录名
-        formMap.put("pwd", Md5Utils.md5(channelDto.getPassword()));//密码 "pwd" -> "e674de7dc3eea073ed3d0018e6c7f1c7"
+        Map<String,String> formMap = new HashMap<>(8);
+        formMap.put("corpId",channelDto.getSprdId());
+        formMap.put("loginName", channelDto.getUserName());
+        formMap.put("pwd", Md5Utils.md5(channelDto.getPassword()));
         formMap.put("ext", StringUtils.EMPTY);
         formMap.put("content",sendVerificationDto.getMessageContent());
         formMap.put("mobileList",sendVerificationDto.getMobileNumber());
@@ -98,9 +98,9 @@ public class MoblieServiceImpl implements SmsService {
     }
 
 
-    public static MoblieServiceImpl getInstanceMoblieService(){
+    public static MobileServiceImpl getInstanceMoblieService(){
         if(Objects.isNull(moblieService)){
-            moblieService =  new MoblieServiceImpl();
+            moblieService =  new MobileServiceImpl();
         }
         return moblieService;
     }
