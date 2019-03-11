@@ -14,7 +14,8 @@ public class Constants {
 
     public static class ExceptonMsg{
 
-        public static final String SECURITY_MSG ="[client_key] or [client_secret] Can not be empty ";
+        public static final Integer SECURITY_CODE = 0000000 ;
+        public static final String SECURITY_MSG ="服务器繁忙，请稍后重试";
 
     }
 }

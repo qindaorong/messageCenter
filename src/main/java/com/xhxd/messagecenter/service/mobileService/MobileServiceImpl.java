@@ -68,8 +68,7 @@ public class MobileServiceImpl implements SmsService {
                 log.info("短信接口返回信息 ----> " + resultXml);
                 Map<String, Object> resultMap = XmlUtil.xmlToMap(resultXml);
                 state = String.valueOf(resultMap.get("code"));
-                if(StringUtils.equals("0000",state)){
-                    //TODO
+                if(!StringUtils.equals("0000",state)){
                     CodeMessage codeMessage = new CodeMessage();
                     codeMessage.setCode(6010);
                     codeMessage.setMessage(String.valueOf(resultMap.get("code")));

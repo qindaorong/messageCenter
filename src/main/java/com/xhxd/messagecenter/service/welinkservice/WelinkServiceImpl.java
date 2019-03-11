@@ -44,17 +44,37 @@ public class WelinkServiceImpl implements SmsService {
     @Override
     public  Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendVerificationDto.getMessageChannel()));
+        Boolean flag = sendMessageParam(channelDto,sendVerificationDto.getMobileNumber(),sendVerificationDto.getMessageContent());
+        if(flag){
+            return  Boolean.TRUE;
+        }else{
+            return  Boolean.FALSE;
+        }
+    }
 
+    @Override
+    public void checkVerificationCode(VerificationCodeDto verificationCodeDto) {
+
+    }
+
+    @Override
+    public void sendMessage(SendMessageDto sendMessageDto) {
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(sendMessageDto.getMessageChannel()));
+        sendMessageParam(channelDto,sendMessageDto.getMobileNumber(),sendMessageDto.getMessageContent());
+
+    }
+
+    public Boolean  sendMessageParam(ChannelDto channelDto,String mobileNumber,String messageContent){
         Map<String,String> headMap = new HashMap<>();
 
         Map<String,String> formMap = new HashMap<>(6);
+
         formMap.put("sname",channelDto.getUserName());
         formMap.put("spwd", channelDto.getPassword());
         formMap.put("scorpid","");
         formMap.put("sprdid",channelDto.getSprdId());
-        formMap.put("sdst",sendVerificationDto.getMobileNumber());
-        formMap.put("smsg",sendVerificationDto.getMessageContent());
-
+        formMap.put("sdst",mobileNumber);
+        formMap.put("smsg",messageContent);
         Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
         String resultXml = "";
         Integer state = 0;
@@ -70,7 +90,7 @@ public class WelinkServiceImpl implements SmsService {
                     codeMessage.setMessage(String.valueOf(resultMap.get("State")));
                     throw  new BusinessException(codeMessage);
                 }else{
-                    return  Boolean.TRUE;
+                    return Boolean.TRUE;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -79,19 +99,8 @@ public class WelinkServiceImpl implements SmsService {
                 response.close();
             }
         }
-        return  Boolean.FALSE;
+        return Boolean.FALSE;
     }
-
-    @Override
-    public void checkVerificationCode(VerificationCodeDto verificationCodeDto) {
-
-    }
-
-    @Override
-    public void sendMessage(SendMessageDto sendMessageDto) {
-        //TODO
-    }
-
 
     public static WelinkServiceImpl getInstanceWelinkService(){
         if(Objects.isNull(welinkService)){

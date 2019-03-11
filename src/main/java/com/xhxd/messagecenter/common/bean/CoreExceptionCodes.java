@@ -10,7 +10,7 @@ package com.xhxd.messagecenter.common.bean;
 import com.xhxd.messagecenter.common.exception.CodeMessage;
 
 public class CoreExceptionCodes {
-    public static final CodeMessage SUCCESS = new CodeMessage(0, "成功");
+    public static final CodeMessage SUCCESS = new CodeMessage(200, "成功");
     public static final CodeMessage FAIL = new CodeMessage(-1 , "失败");
     public static final CodeMessage UNKNOWN_ERROR = new CodeMessage(999999, "系统异常");
     public static final CodeMessage PARAM_IS_NULL = new CodeMessage(20001, "参数为空");

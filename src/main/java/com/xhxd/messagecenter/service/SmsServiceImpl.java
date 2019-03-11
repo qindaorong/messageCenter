@@ -115,7 +115,12 @@ public class SmsServiceImpl implements SmsService {
         //check SMS channels
         this.checkChannel(sendMessageDto.getMessageChannel());
 
+        // check sms messageContent sign
+        this.checkChannelSign(sendMessageDto.getMessageChannel(),sendMessageDto.getMessageContent());
+
         serviceMap.get(sendMessageDto.getMessageChannel()).sendMessage(sendMessageDto);
+
+
 
     }
 
@@ -152,9 +157,15 @@ public class SmsServiceImpl implements SmsService {
     }
 
 
+    /**
+     *  验证list 是否包含字符串
+     * @param list
+     * @param str
+     * @return
+     */
     public  boolean ifInclude(List<String> list,String str){
         for(int i=0; i<list.size(); i++){
-            if (list.get(i).indexOf(str) != -1) {
+            if(str.indexOf(list.get(i)) != -1){
                 return true;
             }
         }

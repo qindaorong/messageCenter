@@ -1,7 +1,9 @@
 package com.xhxd.messagecenter.web.controller;
 
+import com.xhxd.messagecenter.common.Constants;
 import com.xhxd.messagecenter.common.bean.ResponseResult;
 import com.xhxd.messagecenter.common.exception.BusinessException;
+import com.xhxd.messagecenter.common.exception.ExceptionCode;
 import com.xhxd.messagecenter.common.util.Md5Utils;
 import com.xhxd.messagecenter.components.HttpClientUtils;
 import com.xhxd.messagecenter.components.RedisHandler;
@@ -27,35 +29,35 @@ public class MessageCenterController {
     private SmsService smsService;
 
     @PostMapping(value="/sendMessage")
-    public ResponseResult<String> sendMessage(@RequestBody SendMessageDto sendMessageDto){
+    public ResponseResult sendMessage(@RequestBody SendMessageDto sendMessageDto){
 
         try {
             smsService.sendMessage(sendMessageDto);
-            return ResponseResult.success("");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
+        return  ResponseResult.fail(Constants.ExceptonMsg.SECURITY_CODE,Constants.ExceptonMsg.SECURITY_MSG);
     }
 
     @PostMapping(value="/sendVerificationCode")
-    public ResponseResult<String> sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
+    public ResponseResult sendVerificationCode(@RequestBody SendVerificationDto sendVerificationDto){
 
         try {
             smsService.sendVerificationCode(sendVerificationDto);
-            return ResponseResult.success("success");
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode(), e.getMessage());
         }
+        return  ResponseResult.fail(Constants.ExceptonMsg.SECURITY_CODE,Constants.ExceptonMsg.SECURITY_MSG);
     }
 
     @PostMapping(value="/checkVerificationCode")
-    public ResponseResult<String> checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
+    public ResponseResult checkVerificationCode(@RequestBody VerificationCodeDto verificationCodeDto){
         try {
-            return ResponseResult.success("");
+            smsService.checkVerificationCode(verificationCodeDto);
         }catch (BusinessException e){
             return ResponseResult.fail(e.getCode() , e.getMessage());
         }
-
+        return  ResponseResult.fail(Constants.ExceptonMsg.SECURITY_CODE,Constants.ExceptonMsg.SECURITY_MSG);
     }
 
 
