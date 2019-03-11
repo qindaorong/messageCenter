@@ -15,9 +15,9 @@
              url="http://47.101.131.229:8084/SMSTool/BatchSend"
              sprd-id="BJXH"
              verification-code-from = "local"
-             key-word = "【有趣花】,【美超拼团】,【星河金融管家】"
+             key-word = ""
     >
-        <user name="1801" password="Bjxh1801"/>
+        <user name="1801" password="Bjxh1801."/>
     </channel>
 
 

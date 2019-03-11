@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * MD5不可逆加密工具类
@@ -59,5 +61,5 @@ public class Md5Utils {
 	public static byte[] md5(InputStream input) throws IOException {
 		return DigestUtils.digest(input, MD5);
 	}
-	
+
 }

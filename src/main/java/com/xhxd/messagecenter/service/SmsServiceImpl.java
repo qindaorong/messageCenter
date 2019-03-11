@@ -11,6 +11,7 @@ import com.xhxd.messagecenter.entity.ChannelDto;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
+import com.xhxd.messagecenter.service.welinkservice.MoblieServiceImpl;
 import com.xhxd.messagecenter.service.welinkservice.WelinkServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,13 @@ public class SmsServiceImpl implements SmsService {
 
     @PostConstruct
     public void init(){
-        serviceMap.put(ChannelEnum.WELINK.getName(), WelinkServiceImpl.getInstanceWelinkServiceService());
+        serviceMap.put(ChannelEnum.WELINK.getName(), WelinkServiceImpl.getInstanceWelinkService());
+        serviceMap.put(ChannelEnum.MOBILE.getName(), MoblieServiceImpl.getInstanceMoblieService());
     }
 
 
     @Override
-    @RequestLimit
+   // @RequestLimit
     public Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
 
         if(Objects.isNull(sendVerificationDto)){

@@ -11,7 +11,7 @@ import lombok.Getter;
 public enum ChannelEnum {
 
     WELINK("1","51welink"),
-    MOBILE ("2","mobile ");
+    MOBILE ("2","mobile");
 
 
     /**

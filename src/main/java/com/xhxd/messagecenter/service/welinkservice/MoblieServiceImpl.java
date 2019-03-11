@@ -4,6 +4,7 @@ import com.xhxd.messagecenter.common.enums.ChannelEnum;
 import com.xhxd.messagecenter.common.exception.BusinessException;
 import com.xhxd.messagecenter.common.exception.CodeMessage;
 import com.xhxd.messagecenter.common.exception.ExceptionCode;
+import com.xhxd.messagecenter.common.util.Md5Utils;
 import com.xhxd.messagecenter.common.util.XmlUtil;
 import com.xhxd.messagecenter.components.HttpClientUtils;
 import com.xhxd.messagecenter.components.SmsManager;
@@ -15,6 +16,7 @@ import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import com.xhxd.messagecenter.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,16 +24,16 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class WelinkServiceImpl implements SmsService {
+public class MoblieServiceImpl implements SmsService {
 
-    private static WelinkServiceImpl welinkService = null;
+    private static MoblieServiceImpl moblieService = null;
 
     private SmsManager smsManager;
 
     private HttpClientUtils httpClientUtils;
 
-    private WelinkServiceImpl() {
-        if(Objects.isNull(welinkService)){
+    private MoblieServiceImpl() {
+        if(Objects.isNull(moblieService)){
             if(Objects.isNull(smsManager)){
                 smsManager = SpringApplicationContext.getBean(SmsManager.class);
             }
@@ -48,26 +50,29 @@ public class WelinkServiceImpl implements SmsService {
         Map<String,String> headMap = new HashMap<>();
 
         Map<String,String> formMap = new HashMap<>(6);
-        formMap.put("sname",channelDto.getUserName());
-        formMap.put("spwd", channelDto.getPassword());
-        formMap.put("scorpid","");
-        formMap.put("sprdid",channelDto.getSprdId());
-        formMap.put("sdst",sendVerificationDto.getMobileNumber());
-        formMap.put("smsg",sendVerificationDto.getMessageContent());
+        formMap.put("corpId",channelDto.getSprdId());//客户id
+        formMap.put("loginName", channelDto.getUserName());//登录名
+        formMap.put("pwd", Md5Utils.md5(channelDto.getPassword()));//密码 "pwd" -> "e674de7dc3eea073ed3d0018e6c7f1c7"
+        formMap.put("ext", StringUtils.EMPTY);
+        formMap.put("content",sendVerificationDto.getMessageContent());
+        formMap.put("mobileList",sendVerificationDto.getMobileNumber());
+        formMap.put("sendTime",StringUtils.EMPTY);
+        formMap.put("userId",StringUtils.EMPTY);
 
         Response response = httpClientUtils.httpFormPostResponse(channelDto.getUrl(),headMap,formMap);
-        String resultXml = "";
-        Integer state = 0;
+        String resultXml;
+        String state;
         if(response.isSuccessful()){
             try {
                 resultXml = response.body().string();
                 log.info("短信接口返回信息 ----> " + resultXml);
                 Map<String, Object> resultMap = XmlUtil.xmlToMap(resultXml);
-                state = Integer.valueOf(String.valueOf(resultMap.get("State")));
-                if(state != 0){
+                state = String.valueOf(resultMap.get("code"));
+                if(StringUtils.equals("0000",state)){
+                    //TODO
                     CodeMessage codeMessage = new CodeMessage();
                     codeMessage.setCode(6010);
-                    codeMessage.setMessage(String.valueOf(resultMap.get("State")));
+                    codeMessage.setMessage(String.valueOf(resultMap.get("code")));
                     throw  new BusinessException(codeMessage);
                 }else{
                     return  Boolean.TRUE;
@@ -93,10 +98,10 @@ public class WelinkServiceImpl implements SmsService {
     }
 
 
-    public static WelinkServiceImpl getInstanceWelinkService(){
-        if(Objects.isNull(welinkService)){
-            welinkService =  new WelinkServiceImpl();
+    public static MoblieServiceImpl getInstanceMoblieService(){
+        if(Objects.isNull(moblieService)){
+            moblieService =  new MoblieServiceImpl();
         }
-        return welinkService;
+        return moblieService;
     }
 }
