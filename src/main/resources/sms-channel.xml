@@ -7,11 +7,18 @@
              key-word = "【有趣花】,【美超拼团】,【星河金融管家】"
     >
         <user name="dlbjxhhd" password="jRWS9C6s"/>
-       <!-- <key-words>
-            <words>【有趣花】</words>
-            <words>【美超拼团】</words>
-            <words>【星河金融管家】</words>
-        </key-words>-->
     </channel>
+
+
+    <channel id="2" open-switch="true"
+             url="http://47.101.131.229:8084/SMSTool/BatchSend"
+             sprd-id="BJXH"
+             verification-code-from = "local"
+             key-word = "【有趣花】,【美超拼团】,【星河金融管家】"
+    >
+        <user name="1801" password="Bjxh1801"/>
+    </channel>
+
+
 </channels>
 
