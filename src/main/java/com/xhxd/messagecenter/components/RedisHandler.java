@@ -552,11 +552,10 @@ public class RedisHandler {
      * 删除一个或多个集合中的指定值
      *
      * @paramkey
-     * @paramvalues
      * @return成功删除数量
      */
-    public Long remove(String key, Object... values) {
-        return redisTemplate.opsForSet().remove(key, values);
+    public void remove(String key) {
+        redisTemplate.delete(key);
     }
 
     /**
