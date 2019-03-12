@@ -26,22 +26,9 @@ import java.util.Objects;
 @Slf4j
 public class MobileServiceImpl implements SmsService {
 
-    private static MobileServiceImpl moblieService = null;
-
     private SmsManager smsManager;
 
     private HttpClientUtils httpClientUtils;
-
-    private MobileServiceImpl() {
-        if(Objects.isNull(moblieService)){
-            if(Objects.isNull(smsManager)){
-                smsManager = SpringApplicationContext.getBean(SmsManager.class);
-            }
-            if(Objects.isNull(httpClientUtils)){
-                httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
-            }
-        }
-    }
 
     @Override
     public  Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
@@ -106,12 +93,28 @@ public class MobileServiceImpl implements SmsService {
 
     }
 
-
-    public static MobileServiceImpl getInstanceMoblieService(){
-        if(Objects.isNull(moblieService)){
-            moblieService =  new MobileServiceImpl();
+    private MobileServiceImpl(){
+        if(MobileServiceHolder.MOBILE_SERVICE != null){
+            throw new RuntimeException("不允许创建多个实例");
         }
-        return moblieService;
+
+        if(Objects.isNull(smsManager)){
+            smsManager = SpringApplicationContext.getBean(SmsManager.class);
+        }
+        if(Objects.isNull(httpClientUtils)){
+            httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
+        }
+    }
+
+
+    public static final MobileServiceImpl getInstance(){
+        //在返回结果以前，一定会先加载内部类
+        return MobileServiceHolder.MOBILE_SERVICE;
+    }
+
+
+    private static class MobileServiceHolder{
+        private static final MobileServiceImpl MOBILE_SERVICE = new MobileServiceImpl();
     }
 
 

@@ -22,24 +22,11 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class WelinkServiceImpl implements SmsService {
-
-    private static WelinkServiceImpl welinkService = null;
+public class WeLinkServiceImpl implements SmsService {
 
     private SmsManager smsManager;
 
     private HttpClientUtils httpClientUtils;
-
-    private WelinkServiceImpl() {
-        if(Objects.isNull(welinkService)){
-            if(Objects.isNull(smsManager)){
-                smsManager = SpringApplicationContext.getBean(SmsManager.class);
-            }
-            if(Objects.isNull(httpClientUtils)){
-                httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
-            }
-        }
-    }
 
     @Override
     public  Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
@@ -102,10 +89,30 @@ public class WelinkServiceImpl implements SmsService {
         return Boolean.FALSE;
     }
 
-    public static WelinkServiceImpl getInstanceWelinkService(){
-        if(Objects.isNull(welinkService)){
-            welinkService =  new WelinkServiceImpl();
+
+    private WeLinkServiceImpl(){
+        if(WeLinkServiceImpl.WelinkServiceHolder.WELINK_SERVICE != null){
+            throw new RuntimeException("不允许创建多个实例");
         }
-        return welinkService;
+
+        if(Objects.isNull(smsManager)){
+            smsManager = SpringApplicationContext.getBean(SmsManager.class);
+        }
+        if(Objects.isNull(httpClientUtils)){
+            httpClientUtils = SpringApplicationContext.getBean(HttpClientUtils.class);
+        }
     }
+
+
+    public static final WeLinkServiceImpl getInstance(){
+        //在返回结果以前，一定会先加载内部类
+        return WeLinkServiceImpl.WelinkServiceHolder.WELINK_SERVICE;
+    }
+
+
+    private static class WelinkServiceHolder{
+        private static final WeLinkServiceImpl WELINK_SERVICE = new WeLinkServiceImpl();
+    }
+
+
 }

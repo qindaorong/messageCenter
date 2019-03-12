@@ -12,7 +12,7 @@ import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
 import com.xhxd.messagecenter.service.mobileService.MobileServiceImpl;
-import com.xhxd.messagecenter.service.welinkservice.WelinkServiceImpl;
+import com.xhxd.messagecenter.service.welinkservice.WeLinkServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +37,8 @@ public class SmsServiceImpl implements SmsService {
 
     @PostConstruct
     public void init(){
-        serviceMap.put(ChannelEnum.WELINK.getName(), WelinkServiceImpl.getInstanceWelinkService());
-        serviceMap.put(ChannelEnum.MOBILE.getName(), MobileServiceImpl.getInstanceMoblieService());
+        serviceMap.put(ChannelEnum.WELINK.getName(), WeLinkServiceImpl.getInstance());
+        serviceMap.put(ChannelEnum.MOBILE.getName(), MobileServiceImpl.getInstance());
     }
 
 
