@@ -43,7 +43,7 @@ public class SmsServiceImpl implements SmsService {
 
 
     @Override
-    @RequestLimit
+    //@RequestLimit
     public Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
 
         if (Objects.isNull(sendVerificationDto)) {
@@ -114,7 +114,7 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    @RequestLimit
+    //@RequestLimit
     public void sendMessage(SendMessageDto sendMessageDto) {
 
         if (Objects.isNull(sendMessageDto)) {
