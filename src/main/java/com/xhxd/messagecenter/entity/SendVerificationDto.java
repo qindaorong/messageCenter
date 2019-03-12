@@ -38,7 +38,7 @@ public class SendVerificationDto extends BaseDto {
     @ApiModelProperty(value = "验证码消息")
     private String verificationCode;
 
-    @ApiModelProperty(value = "有效时间")
-    private Integer effectiveTime;
+    @ApiModelProperty(value = "有效时间，默认值10")
+    private Integer effectiveTime = 10 ;
 
 }

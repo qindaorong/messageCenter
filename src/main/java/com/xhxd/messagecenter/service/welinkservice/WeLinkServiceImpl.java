@@ -74,7 +74,7 @@ public class WeLinkServiceImpl implements SmsService {
                 if(state != 0){
                     CodeMessage codeMessage = new CodeMessage();
                     codeMessage.setCode(6010);
-                    codeMessage.setMessage(String.valueOf(resultMap.get("State")));
+                    codeMessage.setMessage(String.valueOf(resultMap.get("MsgState")));
                     throw  new BusinessException(codeMessage);
                 }else{
                     return Boolean.TRUE;
