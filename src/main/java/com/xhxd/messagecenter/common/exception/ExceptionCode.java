@@ -141,6 +141,14 @@ public class ExceptionCode {
      */
     public static final CodeMessage  CHANNEL_EXISTENT = new CodeMessage(6009, "该通道不存在");
 
+    /**
+     * 有效时间不能为空
+     */
+    public static final CodeMessage TIME_NOT_NULL = new CodeMessage(6011, "有效时间不能为空");
+    /**
+     * 验证码不可以为空
+     */
+    public static final CodeMessage VERIFICATIONCODE_NOT_NULL = new CodeMessage(6012, "验证码不可以为空");
 
 
 

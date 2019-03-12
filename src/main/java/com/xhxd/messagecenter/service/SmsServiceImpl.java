@@ -26,7 +26,7 @@ import java.util.*;
 @Slf4j
 public class SmsServiceImpl implements SmsService {
 
-    private Map<String,SmsService> serviceMap = new HashMap<>();
+    private Map<String, SmsService> serviceMap = new HashMap<>();
 
     @Autowired
     private RedisHandler redisHandler;
@@ -36,7 +36,7 @@ public class SmsServiceImpl implements SmsService {
     private SmsManager smsManager;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         serviceMap.put(ChannelEnum.WELINK.getName(), WeLinkServiceImpl.getInstance());
         serviceMap.put(ChannelEnum.MOBILE.getName(), MobileServiceImpl.getInstance());
     }
@@ -46,36 +46,47 @@ public class SmsServiceImpl implements SmsService {
     @RequestLimit
     public Boolean sendVerificationCode(SendVerificationDto sendVerificationDto) {
 
-        if(Objects.isNull(sendVerificationDto)){
+        if (Objects.isNull(sendVerificationDto)) {
             throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
         }
+        if (Objects.isNull(sendVerificationDto.getEffectiveTime())) {
+            throw new BusinessException(ExceptionCode.TIME_NOT_NULL);
+        }
+        if (Objects.isNull(sendVerificationDto.getVerificationCode())) {
+            throw new BusinessException(ExceptionCode.VERIFICATIONCODE_NOT_NULL);
+        }
+
 
         // check sms channels messageContent sign
-        this.checkChannel(sendVerificationDto.getMessageChannel(),sendVerificationDto.getMessageContent());
+        this.checkChannel(sendVerificationDto.getMessageChannel(), sendVerificationDto.getMessageContent());
 
         //replace word of context
         String messageContent = sendVerificationDto.getMessageContent();
         String verificationCode = sendVerificationDto.getVerificationCode();
-        if(!StringUtils.isEmpty(messageContent) && !StringUtils.isEmpty(verificationCode)){
-            if(messageContent.indexOf("#code#") != -1){
-                messageContent =  messageContent.replace("#code#",verificationCode);
-                sendVerificationDto.setMessageContent(messageContent);
-            }
+        Integer vTime = sendVerificationDto.getEffectiveTime();
+
+
+        String messageContentUpperCase = messageContent.toUpperCase();
+
+        if (messageContentUpperCase.contains("#VCODE#") && messageContentUpperCase.contains("#VTIME#")) {
+            String content = messageContentUpperCase.replace("#VCODE#", verificationCode).replace("#VTIME#", String.valueOf(vTime));
+            sendVerificationDto.setMessageContent(content);
         }
+
         //send message
         Boolean flag = serviceMap.get(sendVerificationDto.getMessageChannel()).sendVerificationCode(sendVerificationDto);
-        if(flag){
+        if (flag) {
             //save verificationCode and mobileNumber into redis
-            redisHandler.setForTimeMIN(sendVerificationDto.getMobileNumber(),sendVerificationDto.getVerificationCode(),10);
-        }else {
+            redisHandler.setForTimeMIN(sendVerificationDto.getMobileNumber(), sendVerificationDto.getVerificationCode(), 10);
+        } else {
             throw new BusinessException(ExceptionCode.MESSAGE_SERVICE_ERROR);
         }
-        return  Boolean.TRUE;
+        return Boolean.TRUE;
     }
 
     @Override
     public void checkVerificationCode(VerificationCodeDto verificationCodeDto) {
-        if(Objects.isNull(verificationCodeDto)){
+        if (Objects.isNull(verificationCodeDto)) {
             throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
         }
 
@@ -84,18 +95,18 @@ public class SmsServiceImpl implements SmsService {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(code);
 
         // local check code
-        if(ChannelVeriEnum.LOCAL.getName().equalsIgnoreCase(channelDto.getVerificationCodeFrom())){
-            String  codeValue = redisHandler.get(verificationCodeDto.getMobileNumber());
-            if(StringUtils.isEmpty(codeValue)){
+        if (ChannelVeriEnum.LOCAL.getName().equalsIgnoreCase(channelDto.getVerificationCodeFrom())) {
+            String codeValue = redisHandler.get(verificationCodeDto.getMobileNumber());
+            if (StringUtils.isEmpty(codeValue)) {
                 throw new BusinessException(ExceptionCode.CODE_EXPIRATION);
             }
-            if(!codeValue.equalsIgnoreCase(verificationCodeDto.getVerificationCode())){
+            if (!codeValue.equalsIgnoreCase(verificationCodeDto.getVerificationCode())) {
                 throw new BusinessException(ExceptionCode.CODE_ERROR);
             }
             //delete verificationCode and mobileNumber from  redis
             redisHandler.remove(verificationCodeDto.getMobileNumber());
-            log.info("[SmsServiceImpl][checkVerificationCode] check verificationCode success (code={},mobileNumber={}),",codeValue,verificationCodeDto.getMobileNumber());
-        }else{
+            log.info("[SmsServiceImpl][checkVerificationCode] check verificationCode success (code={},mobileNumber={}),", codeValue, verificationCodeDto.getMobileNumber());
+        } else {
             serviceMap.get(verificationCodeDto.getMessageChannel()).checkVerificationCode(verificationCodeDto);
         }
 
@@ -106,31 +117,30 @@ public class SmsServiceImpl implements SmsService {
     @RequestLimit
     public void sendMessage(SendMessageDto sendMessageDto) {
 
-        if(Objects.isNull(sendMessageDto)){
+        if (Objects.isNull(sendMessageDto)) {
             throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
         }
 
         // check sms channels messageContent sign
         String code = ChannelEnum.getByName(sendMessageDto.getMessageChannel());
-        this.checkChannel(code,sendMessageDto.getMessageContent());
+        this.checkChannel(code, sendMessageDto.getMessageContent());
 
         serviceMap.get(sendMessageDto.getMessageChannel()).sendMessage(sendMessageDto);
 
 
-
     }
 
-    private Boolean checkChannel(String messageChannel, String messageContent){
+    private Boolean checkChannel(String messageChannel, String messageContent) {
         String code = ChannelEnum.getByName(messageChannel);
-        ChannelDto  channelDto = smsManager.loadChannelDtoByChannelId(code);
-        if(null != channelDto){
-            if(!CollectionUtils.isEmpty(channelDto.getKeyWordsList())){
-                Boolean flag = this.ifInclude(channelDto.getKeyWordsList(),messageContent);
-                if(!flag){
-                    throw  new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(code);
+        if (null != channelDto) {
+            if (!CollectionUtils.isEmpty(channelDto.getKeyWordsList())) {
+                Boolean flag = this.ifInclude(channelDto.getKeyWordsList(), messageContent);
+                if (!flag) {
+                    throw new BusinessException(ExceptionCode.MESSAGE_NOT_NULL);
                 }
             }
-        }else {
+        } else {
             throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
         }
         return Boolean.TRUE;
@@ -138,14 +148,15 @@ public class SmsServiceImpl implements SmsService {
 
 
     /**
-     *  验证list 是否包含字符串
+     * 验证list 是否包含字符串
+     *
      * @param list
      * @param str
      * @return
      */
-    public  boolean ifInclude(List<String> list,String str){
-        for(int i=0; i<list.size(); i++){
-            if(str.indexOf(list.get(i)) != -1){
+    public boolean ifInclude(List<String> list, String str) {
+        for (int i = 0; i < list.size(); i++) {
+            if (str.indexOf(list.get(i)) != -1) {
                 return true;
             }
         }

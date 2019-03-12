@@ -6,9 +6,10 @@
              sprd-id="1012888"
              verification-code-from = "local">
         <key-words>
-            <word>【有趣花】</word>
+           <!-- <word>【有趣花】</word>
             <word>【美超拼团】</word>
             <word>【星河金融管家】</word>
+            <word>【金贝钱包】</word>-->
         </key-words>
         <user name="dlbjxhhd" password="jRWS9C6s"/>
     </channel>
@@ -20,7 +21,7 @@
              verification-code-from = "local"
     >
         <key-words>
-            <word>【有趣花】</word>
+            <!--<word>【有趣花】</word>-->
         </key-words>
         <user name="1801" password="Bjxh1801."/>
     </channel>
