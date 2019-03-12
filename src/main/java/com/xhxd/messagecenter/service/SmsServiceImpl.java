@@ -123,6 +123,10 @@ public class SmsServiceImpl implements SmsService {
 
         // check sms channels messageContent sign
         String code = ChannelEnum.getByName(sendMessageDto.getMessageChannel());
+
+        if (Objects.isNull(code)) {
+            throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
+        }
         this.checkChannel(code, sendMessageDto.getMessageContent());
 
         serviceMap.get(sendMessageDto.getMessageChannel()).sendMessage(sendMessageDto);
@@ -130,8 +134,7 @@ public class SmsServiceImpl implements SmsService {
 
     }
 
-    private Boolean checkChannel(String messageChannel, String messageContent) {
-        String code = ChannelEnum.getByName(messageChannel);
+    private Boolean checkChannel(String code, String messageContent) {
         ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(code);
         if (null != channelDto) {
             if (!CollectionUtils.isEmpty(channelDto.getKeyWordsList())) {

@@ -148,7 +148,7 @@ public class ExceptionCode {
     /**
      * 验证码不可以为空
      */
-    public static final CodeMessage VERIFICATIONCODE_NOT_NULL = new CodeMessage(6012, "验证码不可以为空");
+    public static final CodeMessage VERIFICATIONCODE_NOT_NULL = new CodeMessage(6012, "验证码不能为空");
 
 
 
