@@ -92,9 +92,9 @@ public class SmsServiceImpl implements SmsService {
             if(!codeValue.equalsIgnoreCase(verificationCodeDto.getVerificationCode())){
                 throw new BusinessException(ExceptionCode.CODE_ERROR);
             }
-
             //delete verificationCode and mobileNumber from  redis
             redisHandler.remove(verificationCodeDto.getMobileNumber());
+            log.info("[SmsServiceImpl][checkVerificationCode] check verificationCode success (code={},mobileNumber={}),",codeValue,verificationCodeDto.getMobileNumber());
         }else{
             serviceMap.get(verificationCodeDto.getMessageChannel()).checkVerificationCode(verificationCodeDto);
         }
