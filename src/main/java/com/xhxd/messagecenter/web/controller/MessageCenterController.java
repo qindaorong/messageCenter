@@ -1,13 +1,7 @@
 package com.xhxd.messagecenter.web.controller;
 
-import com.xhxd.messagecenter.common.Constants;
 import com.xhxd.messagecenter.common.bean.ResponseResult;
 import com.xhxd.messagecenter.common.exception.BusinessException;
-import com.xhxd.messagecenter.common.exception.ExceptionCode;
-import com.xhxd.messagecenter.common.util.Md5Utils;
-import com.xhxd.messagecenter.components.HttpClientUtils;
-import com.xhxd.messagecenter.components.RedisHandler;
-import com.xhxd.messagecenter.components.annotation.RequestLimit;
 import com.xhxd.messagecenter.entity.SendMessageDto;
 import com.xhxd.messagecenter.entity.SendVerificationDto;
 import com.xhxd.messagecenter.entity.VerificationCodeDto;
@@ -15,11 +9,10 @@ import com.xhxd.messagecenter.service.SmsService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")

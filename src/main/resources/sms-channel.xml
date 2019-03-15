@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <channels>
-    <!--welink-->
+    <!--微网-->
     <channel id="1" open-switch="true"
              url="https://seccf.51welink.com/submitdata/service.asmx/g_Submit"
              sprd-id="1012888"
@@ -12,10 +12,11 @@
             <word>【金贝钱包】</word>-->
         </key-words>
         <user name="dlbjxhhd" password="jRWS9C6s"/>
+       <!-- <user name="dlgalaxymcpt" password="jRWS9C6s"/>-->
     </channel>
 
-    <!--移动通道-->
-    <channel id="2" open-switch="true"
+    <!--九果-->
+    <channel id="2" open-switch="false"
              url="http://47.101.131.229:8084/SMSTool/BatchSend"
              sprd-id="BJXH"
              verification-code-from = "local"
