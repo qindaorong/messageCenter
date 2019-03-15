@@ -2,6 +2,7 @@ package com.xhxd.messagecenter.components;
 
 
 import com.xhxd.messagecenter.common.exception.BusinessException;
+import com.xhxd.messagecenter.common.exception.ExceptionCode;
 import com.xhxd.messagecenter.entity.ChannelDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -54,10 +55,10 @@ public class SmsManager {
      */
     public ChannelDto loadChannelDtoByChannelId(String id) throws BusinessException {
         if(!channelDtoMap.containsKey(id)){
-            throw new BusinessException(9999,"channel don't exist");
+            throw new BusinessException(ExceptionCode.CHANNEL_EXISTENT);
         }
         if(!channelDtoMap.get(id).getOpenSwitch()){
-            throw new BusinessException(9998,"channel don't open");
+            throw new BusinessException(ExceptionCode.CHANNEL_CLOSURE);
         }
 
         return channelDtoMap.get(id);
