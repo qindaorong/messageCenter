@@ -135,7 +135,7 @@ public class SmsServiceImpl implements SmsService {
     }
 
     private Boolean checkChannel(String code, String messageContent) {
-        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(code);
+        ChannelDto channelDto = smsManager.loadChannelDtoByChannelId(ChannelEnum.getByName(code));
         if (null != channelDto) {
             if (!CollectionUtils.isEmpty(channelDto.getKeyWordsList())) {
                 Boolean flag = this.ifInclude(channelDto.getKeyWordsList(), messageContent);
